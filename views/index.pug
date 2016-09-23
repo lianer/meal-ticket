@@ -5,10 +5,10 @@ block header
 
 block content
   #app
-    <checklist title="加班报名" :options="member" :value.sync="selectedMember" @on-change="change" :required="false"></checklist>
-      //- <group>
-      //-   <cell title="vue" value="cool"></cell>
-      //- </group>
+    <group>
+      <cell title="vue" value="cool"></cell>
+      <checklist title="加班报名" :options="member" :value.sync="selectedMember" @on-change="change" :required="false"></checklist>
+    </group>
 
 block append footer
   script(src='/static/plugins/vux/dist/components/group/index.js')
