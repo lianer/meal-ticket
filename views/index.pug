@@ -1,0 +1,17 @@
+extends layout
+
+block header
+  link(rel='stylesheet', href='/static/plugins/vux/dist/components/checklist/style.css')
+
+block content
+  #app
+    <checklist title="加班报名" :options="member" :value.sync="selectedMember" @on-change="change" :required="false"></checklist>
+      //- <group>
+      //-   <cell title="vue" value="cool"></cell>
+      //- </group>
+
+block append footer
+  script(src='/static/plugins/vux/dist/components/group/index.js')
+  script(src='/static/plugins/vux/dist/components/cell/index.js')
+  script(src='/static/plugins/vux/dist/components/checklist/index.js')
+  script(src='/static/js/index.js')
