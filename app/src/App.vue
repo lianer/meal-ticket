@@ -8,7 +8,6 @@
   export default {
     data () {
       return {
-        api: 'http://192.168.0.101:4003',
         direction: 'current'
       }
     }
