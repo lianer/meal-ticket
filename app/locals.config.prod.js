@@ -1,3 +1,3 @@
 module.exports = {
-  api: 'http://ticket.imlianer.com'
+  api: 'http://api.ticket.imlianer.com'
 }
