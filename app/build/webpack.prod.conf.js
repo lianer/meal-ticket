@@ -27,6 +27,9 @@ var webpackConfig = merge(baseWebpackConfig, {
     })
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      locals: path.join(__dirname, '../locals.config.prod.js')
+    }),
     // http://vuejs.github.io/vue-loader/workflow/production.html
     new webpack.DefinePlugin({
       'process.env': env

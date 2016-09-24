@@ -19,6 +19,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/static', express.static(path.join(__dirname, 'public')));
 
+app.use(function (req, res, next) {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS');
+  res.set('Access-Control-Allow-Headers', "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With");
+  next();
+});
+
 app.use('/', require('./routes/index'));
 
 // catch 404 and forward to error handler

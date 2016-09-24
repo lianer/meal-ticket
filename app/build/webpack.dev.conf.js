@@ -1,3 +1,4 @@
+var path = require('path')
 var config = require('../config')
 var webpack = require('webpack')
 var merge = require('webpack-merge')
@@ -17,6 +18,9 @@ module.exports = merge(baseWebpackConfig, {
   // eval-source-map is faster for development
   devtool: '#eval-source-map',
   plugins: [
+    new webpack.ProvidePlugin({
+      locals: path.join(__dirname, '../locals.config.dev.js')
+    }),
     new webpack.DefinePlugin({
       'process.env': config.dev.env
     }),

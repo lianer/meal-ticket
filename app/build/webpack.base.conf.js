@@ -40,6 +40,11 @@ module.exports = {
       }
     ],
     loaders: [
+      // vux 从npm模块引入需要单独指定
+      {
+        test: /vux.src.*?js$/,
+        loader: 'babel'
+      },
       {
         test: /\.vue$/,
         loader: 'vue'

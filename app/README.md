@@ -2,6 +2,30 @@
 
 > A Vue.js project
 
+npm run build 引入locals.config.prod.js 配置文件，
+npm run dev 引入locals.config.dev.js 配置文件。
+
+## 开发
+``` bash
+npm run dev
+```
+
+## 打包
+``` bash
+npm run build
+```
+
+## 本地预览
+``` bash
+node ./server.js
+```
+
+
+
+
+
+
+
 ## Build Setup
 
 ``` bash
