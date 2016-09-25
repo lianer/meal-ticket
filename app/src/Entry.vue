@@ -27,7 +27,6 @@
     },
     init: function () {
       var vm = this
-      console.log(vm)
       vm.$http.get(locals.api + '/teams').then(({body}) => {
         vm.teams = body.data
       })
