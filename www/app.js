@@ -7,6 +7,13 @@ var bodyParser = require('body-parser');
 
 var app = express();
 
+app.use(function (req, res, next) {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'PUT,POST,GET,DELETE,OPTIONS');
+  res.set('Access-Control-Allow-Headers', "Origin, No-Cache, X-Requested-With, If-Modified-Since, Pragma, Last-Modified, Cache-Control, Expires, Content-Type, X-E4M-With");
+  next();
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
