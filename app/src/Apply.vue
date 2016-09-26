@@ -2,9 +2,9 @@
   <div class="page-apply">
     <x-header :left-options="{showBack: true, backText: ''}">报名</x-header>
 
-    <group title="">
-      <x-input :placeholder="'请输入姓名'" :value.sync="value" :required="false" @keyup.enter="submit">
-        <icon type="search" @click="submit"></icon>
+    <group title="" v-if="showInput">
+      <x-input :placeholder="'请输入你的姓名，一天只能提交一次'" :value.sync="value" :required="false" @keyup.enter="confirmSubmit">
+        <icon type="search" @click="confirmSubmit"></icon>
       </x-input>
     </group>
     
@@ -12,18 +12,20 @@
     
     <group title="成员列表">
       <cell v-for="item in member" :title="item" :link="'/' + team + '/' + item">
-        <icon type="clear" @click.stop="confirmRemove(item)"></icon>
+        <!-- <icon type="clear" @click.stop="confirmRemove(item)"></icon> -->
       </cell>
     </group>
     
     <toast :show.sync="already" :type="'text'">该成员已存在</toast>
     
     <confirm :show.sync="confirm" title="确认删除？" @on-confirm="remove(true)" @on-cancel="remove(false)"></confirm>
+    <confirm :show.sync="showConfirmSubmitModal" title="每天只有一次提交，确认提交？" @on-confirm="submit(true)" @on-cancel="submit(false)"></confirm>
   </div>
 </template>
 
 <script>
   import moment from 'moment'
+  import store from 'store'
 
   import xHeader from 'vux/src/components/x-header'
   import Group from 'vux/src/components/group'
@@ -50,7 +52,9 @@
         already: false,
         confirm: false,
         today: moment().format('YYYY-MM-DD').toString(),
-        timer: -1
+        timer: -1,
+        showInput: true,
+        showConfirmSubmitModal: false
       }
     },
     computed: {
@@ -62,9 +66,20 @@
       }
     },
     methods: {
-      submit: function () {
+      confirmSubmit: function () {
         var vm = this
         var value = vm.value.trim()
+        if (!value) {
+          return
+        }
+        vm.showConfirmSubmitModal = true
+      },
+      submit: function (ok) {
+        var vm = this
+        var value = vm.value.trim()
+        if (!ok) {
+          return
+        }
         if (!value) {
           return
         }
@@ -72,6 +87,9 @@
           vm.already = true
           return
         }
+        var date = 'date_' + moment().format('YYYY-MM-DD').toString()
+        store.set(date, 1)
+        vm.showInput = false
 
         // keydown后同步修改vm.value，不会生效
         // 可能是插件监听keyup事件后重新赋值
@@ -87,6 +105,8 @@
           }
         }).then(function () {
           vm.update()
+        }, function () {
+          store.set(date, 0)
         })
       },
       remove: function (ok) {
@@ -131,6 +151,11 @@
         vm.timer = setTimeout(poll, 2000)
       }
       vm.timer = setTimeout(poll, 1000)
+
+      var date = 'date_' + moment().format('YYYY-MM-DD').toString()
+      if (store.get(date)) {
+        vm.showInput = false
+      }
     },
     destroyed: function () {
       var vm = this

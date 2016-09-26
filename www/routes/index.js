@@ -10,8 +10,17 @@ var db = low(path.join(__dirname, '../data/db2.json'), {
 });
 db.defaults({})
 
+function getClientIp(req) {
+  return req.headers['x-forwarded-for'] ||
+  req.connection.remoteAddress ||
+  req.socket.remoteAddress ||
+  req.connection.socket.remoteAddress;
+};
+
 // 获取团队列表
 router.get('/teams', function (req, res, next) {
+  console.log(req.headers['user-agent'], getClientIp(req));
+
   // 遍历对象的属性，返回每个属性的新值
   var teams = db.mapValues(function (item) {
     return {
