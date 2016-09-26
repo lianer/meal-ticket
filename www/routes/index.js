@@ -179,6 +179,28 @@ router.delete('/team/apply', function (req, res, next) {
   });
 });
 
+// 删除全部团队成员
+router.delete('/team/clear', function (req, res, next) {
+  var date = moment().format("YYYYMMDD").toString();
+  var teamId = req.body.teamId;
+  if(!db.has(teamId).value()){
+    res.json({
+      err: 1,
+      msg: '该团队不存在'
+    })
+    return;
+  }
+  db.update(`${teamId}.apply.date${date}`, function (users) {
+    return [];
+  }).value();
+  var apply = db.get(`${teamId}.apply.date${date}`).value();
+  res.json({
+    err: 0,
+    msg: '',
+    data: apply
+  });
+});
+
 // 获取成员信息
 router.get('/user', function (req, res, next) {
   var teamId = req.query.teamId;
