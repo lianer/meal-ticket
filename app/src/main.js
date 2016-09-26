@@ -29,9 +29,9 @@ const router = new VueRouter({
 
 // 路由跳转处理，包括动效控制
 var historyStack = []
-router.beforeEach(function (route) {
-  var fromPath = route.from.path
-  var toPath = route.to.path
+router.beforeEach(function (transition) {
+  var fromPath = transition.from.path
+  var toPath = transition.to.path
   var direction
   var index = historyStack.length - 1
 
@@ -54,8 +54,7 @@ router.beforeEach(function (route) {
   }
 
   router.app.direction = direction
-  Vue.nextTick(() => route.next())
-  // setTimeout(() => route.next(), 50)
+  Vue.nextTick(() => transition.next())
 })
 
 router.map({

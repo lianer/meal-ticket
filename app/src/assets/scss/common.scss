@@ -1,5 +1,6 @@
 body{
   overflow-x: hidden;
+  font-family: 'Microsoft YaHei',Helvetica Neue,Helvetica,Arial,sans-serif !important;
 }
 
 #app{
@@ -13,6 +14,10 @@ body{
   will-change: transform;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
+  .vux-header{
+    background: #175392;
+    // background: -webkit-linear-gradient(top, #222, #444);
+  }
 }
 
 a, .vux-tap-active{

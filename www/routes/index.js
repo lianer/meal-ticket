@@ -15,7 +15,7 @@ router.get('/teams', function (req, res, next) {
   // 遍历对象的属性，返回每个属性的新值
   var teams = db.mapValues(function (item) {
     return {
-      teamName: item.name
+      teamName: item.teamName
     }
   }).value();
 
@@ -37,8 +37,16 @@ router.get('/teams', function (req, res, next) {
 
 // 新增团队
 router.post('/team', function (req, res, next) {
+  var token = req.headers.token;
   var teamId = req.body.teamId;
   var teamName = req.body.teamName;
+  if(token !== '20160926'){
+    res.json({
+      err: 3,
+      msg: '无权限'
+    });
+    return;
+  }
   if(!teamId || !teamName){
     res.json({
       err: 1,
@@ -68,12 +76,13 @@ router.post('/team', function (req, res, next) {
 // 获取团队名称
 router.get('/team/name', function (req, res, next) {
   var teamId = req.query.teamId
-  var teamName = db.get(`${teamId}.name`).value();
+  var teamName = db.get(`${teamId}.teamName`).value();
   if(!teamName){
     res.json({
       err: 1,
       msg: '该团队不存在'
     })
+    return;
   }
   res.json({
     err: 0,
@@ -96,13 +105,11 @@ router.get('/team/apply', function (req, res, next) {
     return;
   }
   var apply = db.get(`${teamId}.apply.date${date}`, []).cloneDeep().reverse().value();
-  setTimeout(function () {
-    res.json({
-      err: 0,
-      msg: '',
-      data: apply
-    });
-  }, 300);
+  res.json({
+    err: 0,
+    msg: '',
+    data: apply
+  });
 });
 
 // 新增团队成员

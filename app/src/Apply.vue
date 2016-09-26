@@ -1,14 +1,14 @@
 <template>
   <div class="page-apply">
-    <x-header :left-options="{showBack: true, backText: ''}" style="background: #8dc128;">报名</x-header>
-    
+    <x-header :left-options="{showBack: true, backText: ''}">报名</x-header>
+
     <group title="">
       <x-input :placeholder="'请输入姓名'" :value.sync="value" :required="false" @keydown.enter="submit">
         <icon type="search" @click="submit"></icon>
       </x-input>
     </group>
     
-    <div class="count"><span>已报名{{member.length}}人</span></div>
+    <div class="count"><span>{{today}} 已报名{{member.length}}人</span></div>
     
     <group title="成员列表">
       <cell v-for="item in member" :title="item" :link="'/' + team + '/' + item">
@@ -23,6 +23,8 @@
 </template>
 
 <script>
+  import moment from 'moment'
+
   import xHeader from 'vux/src/components/x-header'
   import Group from 'vux/src/components/group'
   import Cell from 'vux/src/components/cell'
@@ -46,7 +48,8 @@
         member: [],
         value: '',
         already: false,
-        confirm: false
+        confirm: false,
+        today: moment().format('YYYY-MM-DD').toString()
       }
     },
     computed: {
@@ -99,19 +102,38 @@
         var vm = this
         vm.confirmTarget = item
         vm.confirm = true
+      },
+      update: function () {
+        var vm = this
+        return vm.$http({
+          method: 'get',
+          url: locals.api + '/team/apply',
+          params: {
+            teamId: vm.$route.params.team
+          }
+        }).then(function ({body}) {
+          vm.member = body.data
+          vm.$root.loadingVisible = false
+        })
       }
     },
-    compiled: function () {
+    ready: function () {
       var vm = this
-      vm.$http({
-        method: 'get',
-        url: locals.api + '/team/apply',
-        params: {
-          teamId: vm.$route.params.team
-        }
-      }).then(function ({body}) {
-        vm.member = body.data
-      })
+      var poll = async function () {
+        await vm.update()
+        setTimeout(poll, 2000)
+      }
+      setTimeout(poll, 1000)
+    },
+    route: {
+      activate: function (transition) {
+        var vm = this
+        vm.$root.loadingVisible = true
+        vm.update().then(function () {
+          vm.$root.loadingVisible = false
+          transition.next()
+        })
+      }
     }
   }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <x-header :left-options="{showBack: false}" style="background: #8dc128;">饭票</x-header>
+    <x-header :left-options="{showBack: false}">饭票</x-header>
     <group>
       <cell v-for="(id, team) in teams" :title="team.teamName" :link="`/${id}`"></cell>
     </group>
@@ -25,11 +25,18 @@
         teams: []
       }
     },
-    init: function () {
-      var vm = this
-      vm.$http.get(locals.api + '/teams').then(({body}) => {
-        vm.teams = body.data
-      })
+    route: {
+      activate: function (transition) {
+        var vm = this
+
+        vm.$root.loadingVisible = true
+
+        vm.$http.get(locals.api + '/teams').then(({body}) => {
+          vm.teams = body.data
+          vm.$root.loadingVisible = false
+          transition.next()
+        })
+      }
     }
   }
 </script>

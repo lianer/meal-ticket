@@ -1,6 +1,6 @@
 <template>
   <div class="page-user">
-    <x-header :left-options="{showBack: true, backText: ''}"  style="background: #8dc128;">{{userName}}</x-header>
+    <x-header :left-options="{showBack: true, backText: ''}">{{userName}}</x-header>
     <div class="count">
       <span>{{teamName}} {{userName}} 已加班 {{count}} 天</span>
     </div>
@@ -34,32 +34,37 @@
         count: 0
       }
     },
-    compiled: function () {
-      var vm = this
+    route: {
+      activate: function (transition) {
+        var vm = this
 
-      vm.teamId = vm.$route.params.team
-      vm.userName = vm.$route.params.user
+        vm.$root.loadingVisible = true
+        vm.teamId = vm.$route.params.team
+        vm.userName = vm.$route.params.user
 
-      vm.$http({
-        method: 'get',
-        url: locals.api + '/team/name',
-        params: {
-          teamId: vm.teamId
-        }
-      }).then(function ({body}) {
-        vm.teamName = body.data.teamName
-      })
+        vm.$http({
+          method: 'get',
+          url: locals.api + '/team/name',
+          params: {
+            teamId: vm.teamId
+          }
+        }).then(function ({body}) {
+          vm.teamName = body.data.teamName
+        })
 
-      vm.$http({
-        method: 'get',
-        url: locals.api + '/user',
-        params: {
-          teamId: vm.teamId,
-          userName: vm.userName
-        }
-      }).then(function ({body}) {
-        vm.count = body.data.count.length
-      })
+        vm.$http({
+          method: 'get',
+          url: locals.api + '/user',
+          params: {
+            teamId: vm.teamId,
+            userName: vm.userName
+          }
+        }).then(function ({body}) {
+          vm.count = body.data.count.length
+          vm.$root.loadingVisible = false
+          transition.next()
+        })
+      }
     }
   }
 </script>
