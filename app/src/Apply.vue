@@ -3,7 +3,7 @@
     <x-header :left-options="{showBack: true, backText: ''}">报名</x-header>
 
     <group title="">
-      <x-input :placeholder="'请输入姓名'" :value.sync="value" :required="false" @keydown.enter="submit">
+      <x-input :placeholder="'请输入姓名'" :value.sync="value" :required="false" @keyup.enter="submit">
         <icon type="search" @click="submit"></icon>
       </x-input>
     </group>
@@ -72,7 +72,10 @@
           vm.already = true
           return
         }
-        vm.member.splice(0, 0, value)
+
+        // keydown后同步修改vm.value，不会生效
+        // 可能是插件监听keyup事件后重新赋值
+        // 改成keyup解决了
         vm.value = ''
 
         vm.$http({
@@ -82,20 +85,24 @@
             teamId: vm.$route.params.team,
             userName: value
           }
+        }).then(function () {
+          vm.update()
         })
       },
       remove: function (ok) {
         var vm = this
-        vm.$http({
-          method: 'delete',
-          url: locals.api + '/team/apply',
-          body: {
-            teamId: vm.$route.params.team,
-            userName: vm.confirmTarget
-          }
-        })
         if (ok) {
           vm.member.$remove(vm.confirmTarget)
+          vm.$http({
+            method: 'delete',
+            url: locals.api + '/team/apply',
+            body: {
+              teamId: vm.$route.params.team,
+              userName: vm.confirmTarget
+            }
+          }).then(function () {
+            vm.update()
+          })
         }
         vm.confirmTarget = null
       },
