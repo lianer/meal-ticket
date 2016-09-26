@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-view :transition="`vux-route-${direction}`"></router-view>
-    <loading :show="loadingVisible" :text="loadingText" transition="fadein"></loading>
+    <loading :show="loadingVisible" :text="loadingText"></loading>
   </div>
 </template>
 
@@ -23,7 +23,7 @@
 
 <style lang="scss" scoped>
   .fadein-transition{
-    transition: all .15s ease-out;
+    transition: all .15s linear .15s;
     opacity: 1;
     // transform: scale(1);
   }

@@ -137,8 +137,8 @@
           vm.$root.loadingVisible = false
           // 不知道什么原因，loading的动画，会被下一页的入场动画打断，导致loading的遮罩层永远不隐藏
           // 猜测可能是入场动画的transform导致loading的opacity的事件被打断
-          // vm.$nextTick(() => transition.next())
-          setTimeout(() => transition.next(), 150)
+          transition.next()
+          // setTimeout(() => transition.next(), 150)
         })
       }
     }
