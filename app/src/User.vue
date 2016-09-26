@@ -62,7 +62,8 @@
         }).then(function ({body}) {
           vm.count = body.data.count.length
           vm.$root.loadingVisible = false
-          transition.next()
+          // transition.next()
+          setTimeout(() => transition.next(), 150)
         })
       }
     }

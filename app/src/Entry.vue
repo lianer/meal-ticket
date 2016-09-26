@@ -34,7 +34,8 @@
         vm.$http.get(locals.api + '/teams').then(({body}) => {
           vm.teams = body.data
           vm.$root.loadingVisible = false
-          transition.next()
+          // transition.next()
+          setTimeout(() => transition.next(), 150)
         })
       }
     }
