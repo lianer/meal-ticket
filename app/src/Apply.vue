@@ -113,7 +113,6 @@
           }
         }).then(function ({body}) {
           vm.member = body.data
-          vm.$root.loadingVisible = false
         })
       }
     },

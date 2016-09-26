@@ -1,2 +1,3 @@
 git pull origin master
-pm2 restart meal-ticket-api
+cnpm i
+pm2 restart ticket-api
