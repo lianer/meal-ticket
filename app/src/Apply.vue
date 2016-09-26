@@ -49,7 +49,8 @@
         value: '',
         already: false,
         confirm: false,
-        today: moment().format('YYYY-MM-DD').toString()
+        today: moment().format('YYYY-MM-DD').toString(),
+        timer: -1
       }
     },
     computed: {
@@ -120,9 +121,13 @@
       var vm = this
       var poll = async function () {
         await vm.update()
-        setTimeout(poll, 2000)
+        vm.timer = setTimeout(poll, 2000)
       }
-      setTimeout(poll, 1000)
+      vm.timer = setTimeout(poll, 1000)
+    },
+    destroyed: function () {
+      var vm = this
+      clearTimeout(vm.timer)
     },
     route: {
       activate: function (transition) {
