@@ -1,3 +1,3 @@
 module.exports = {
-  api: 'http://lianer.com:4004'
+  api: 'http://192.168.119.167:4004'
 }

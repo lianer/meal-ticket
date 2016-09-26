@@ -10,17 +10,18 @@ var db = low(path.join(__dirname, '../data/db2.json'), {
 });
 db.defaults({})
 
+const TOKEN = '20160926'
+
 function getClientIp(req) {
-  return req.headers['x-forwarded-for'] ||
-  req.connection.remoteAddress ||
-  req.socket.remoteAddress ||
-  req.connection.socket.remoteAddress;
+  return req.headers['x-forwarded-for'] || 
+    req.headers['x-real-ip'] || 
+    req.connection.remoteAddress || 
+    req.socket.remoteAddress || 
+    req.connection.socket.remoteAddress;
 };
 
 // 获取团队列表
 router.get('/teams', function (req, res, next) {
-  console.log(req.headers['user-agent'], getClientIp(req));
-
   // 遍历对象的属性，返回每个属性的新值
   var teams = db.mapValues(function (item) {
     return {
@@ -49,7 +50,8 @@ router.post('/team', function (req, res, next) {
   var token = req.headers.token;
   var teamId = req.body.teamId;
   var teamName = req.body.teamName;
-  if(token !== '20160926'){
+
+  if(token !== TOKEN){
     res.json({
       err: 3,
       msg: '无权限'
@@ -123,6 +125,11 @@ router.get('/team/apply', function (req, res, next) {
 
 // 新增团队成员
 router.post('/team/apply', function (req, res, next) {
+  console.log(1, req.headers['x-forwarded-for']);
+  console.log(2, req.headers['x-real-ip']);
+  console.log(3, req.connection.remoteAddress);
+  // console.log(req.headers['user-agent']);
+
   var date = moment().format("YYYYMMDD").toString();
   var teamId = req.body.teamId;
   var userName = req.body.userName;
@@ -192,6 +199,14 @@ router.delete('/team/apply', function (req, res, next) {
 router.delete('/team/clear', function (req, res, next) {
   var date = moment().format("YYYYMMDD").toString();
   var teamId = req.body.teamId;
+  var token = req.body.token;
+  if(token !== TOKEN){
+    res.json({
+      err: 2,
+      msg: '无权限'
+    });
+    return;
+  }
   if(!db.has(teamId).value()){
     res.json({
       err: 1,
