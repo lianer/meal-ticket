@@ -1,9 +1,10 @@
 body{
   overflow-x: hidden;
   font-family: 'Microsoft YaHei',Helvetica Neue,Helvetica,Arial,sans-serif !important;
-  &::-webkit-scrollbar{
-    display: none;
-  }
+}
+
+*::-webkit-scrollbar{
+  display: none;
 }
 
 #app{
