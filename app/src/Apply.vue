@@ -1,17 +1,24 @@
 <template>
   <div class="page-apply">
-    <x-header :left-options="{showBack: true, backText: ''}">报名</x-header>
-
     <group title="" v-if="showInput">
-      <x-input :placeholder="'请输入你的姓名，一天只能提交一次'" :value.sync="value" :required="false" @keyup.enter="confirmSubmit">
-        <icon type="search" @click="confirmSubmit"></icon>
+      <x-input 
+        :placeholder="placeholder" 
+        :value.sync="value" 
+        :required="false" 
+        :show-clear="false"
+        @keyup.enter="confirmSubmit" 
+        @keydown.tab.prevent="useLastApplyUserName"
+        >
+        <!-- <icon type="search" @click="confirmSubmit"></icon> -->
+        <icon type="success_no_circle" @click="confirmSubmit"></icon>
+        <!-- <span @click="confirmSubmit"> ok </span> -->
       </x-input>
     </group>
     
     <div class="count"><span>{{today}} 已报名{{member.length}}人</span></div>
     
     <group title="成员列表">
-      <cell v-for="item in member" :title="item" :link="'/' + team + '/' + item">
+      <cell v-for="item in member" :title="item" :link="'/' + teamId + '/' + item">
         <!-- <icon type="clear" @click.stop="confirmRemove(item)"></icon> -->
       </cell>
     </group>
@@ -27,7 +34,6 @@
   import moment from 'moment'
   import store from 'store'
 
-  import xHeader from 'vux/src/components/x-header'
   import Group from 'vux/src/components/group'
   import Cell from 'vux/src/components/cell'
   import xInput from 'vux/src/components/x-input'
@@ -39,7 +45,6 @@
     components: {
       Group,
       Cell,
-      xHeader,
       xInput,
       icon,
       toast,
@@ -54,15 +59,19 @@
         today: moment().format('YYYY-MM-DD').toString(),
         timer: -1,
         showInput: true,
-        showConfirmSubmitModal: false
+        showConfirmSubmitModal: false,
+        teamId: '',
+        teamName: '',
+        lastApplyUserName: ''
       }
     },
     computed: {
-      team () {
-        return 'yypt'
-        // debugger
-        // console.log(this.$route.params.team)
-        // return this.$route.params.team
+      placeholder: function () {
+        var vm = this
+        if (vm.lastApplyUserName) {
+          return vm.lastApplyUserName
+        }
+        return '请输入你的姓名，一天只能提交一次'
       }
     },
     methods: {
@@ -91,6 +100,8 @@
         store.set(date, 1)
         vm.showInput = false
 
+        store.set('lastApplyUserName', value)
+
         // keydown后同步修改vm.value，不会生效
         // 可能是插件监听keyup事件后重新赋值
         // 改成keyup解决了
@@ -100,7 +111,7 @@
           method: 'post',
           url: locals.api + '/team/apply',
           body: {
-            teamId: vm.$route.params.team,
+            teamId: vm.teamId,
             userName: value
           }
         }).then(function () {
@@ -117,7 +128,7 @@
             method: 'delete',
             url: locals.api + '/team/apply',
             body: {
-              teamId: vm.$route.params.team,
+              teamId: vm.teamId,
               userName: vm.confirmTarget
             }
           }).then(function () {
@@ -137,11 +148,17 @@
           method: 'get',
           url: locals.api + '/team/apply',
           params: {
-            teamId: vm.$route.params.team
+            teamId: vm.teamId
           }
         }).then(function ({body}) {
           vm.member = body.data
         })
+      },
+      useLastApplyUserName: function () {
+        var vm = this
+        if (vm.lastApplyUserName) {
+          vm.value = vm.lastApplyUserName
+        }
       }
     },
     ready: function () {
@@ -164,13 +181,30 @@
     route: {
       activate: function (transition) {
         var vm = this
+
+        vm.teamId = vm.$route.params.team
         vm.$root.loadingVisible = true
-        vm.update().then(function () {
+
+        if (store.get('lastApplyUserName')) {
+          vm.lastApplyUserName = store.get('lastApplyUserName')
+        }
+
+        vm.$http({
+          method: 'get',
+          url: locals.api + '/team/name',
+          params: {
+            teamId: vm.teamId
+          }
+        }).then(function ({body}) {
+          vm.teamName = body.data.teamName
+          vm.$root.$refs.header.title = vm.teamName
+        }).then(function () {
+          return vm.update()
+        }).then(function () {
           vm.$root.loadingVisible = false
           // 不知道什么原因，loading的动画，会被下一页的入场动画打断，导致loading的遮罩层永远不隐藏
           // 猜测可能是入场动画的transform导致loading的opacity的事件被打断
           transition.next()
-          // setTimeout(() => transition.next(), 150)
         })
       }
     }

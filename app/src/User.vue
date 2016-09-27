@@ -1,6 +1,5 @@
 <template>
   <div class="page-user">
-    <x-header :left-options="{showBack: true, backText: ''}">{{userName}}</x-header>
     <div class="count">
       <span>{{teamName}} {{userName}} 已加班 {{count}} 天</span>
     </div>
@@ -8,7 +7,6 @@
 </template>
 
 <script>
-  import xHeader from 'vux/src/components/x-header'
   import Group from 'vux/src/components/group'
   import Cell from 'vux/src/components/cell'
   import xInput from 'vux/src/components/x-input'
@@ -20,7 +18,6 @@
     components: {
       Group,
       Cell,
-      xHeader,
       xInput,
       icon,
       toast,
@@ -38,9 +35,10 @@
       activate: function (transition) {
         var vm = this
 
-        vm.$root.loadingVisible = true
         vm.teamId = vm.$route.params.team
         vm.userName = vm.$route.params.user
+        vm.$root.loadingVisible = true
+        vm.$root.$refs.header.title = vm.userName
 
         vm.$http({
           method: 'get',

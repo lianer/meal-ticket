@@ -54,6 +54,18 @@ router.beforeEach(function (transition) {
   }
 
   router.app.direction = direction
+
+  router.app.$refs.header.leftOptions = {
+    backText: '',
+    preventGoBack: false,
+    showBack: true
+  }
+  router.app.$refs.header.rightOptions = {
+    showMore: false
+  }
+  router.app.$refs.header.title = ''
+  router.app.$refs.header.transition = null
+
   Vue.nextTick(() => transition.next())
 })
 

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <x-header :left-options="{showBack: false}">饭票</x-header>
     <group>
       <cell v-for="(id, team) in teams" :title="team.teamName" :link="`/${id}`"></cell>
     </group>
@@ -8,7 +7,6 @@
 </template>
 
 <script>
-  import xHeader from 'vux/src/components/x-header'
   import Group from 'vux/src/components/group'
   import Cell from 'vux/src/components/cell'
   import xInput from 'vux/src/components/x-input'
@@ -17,7 +15,6 @@
     components: {
       Group,
       Cell,
-      xHeader,
       xInput
     },
     data () {
@@ -30,12 +27,13 @@
         var vm = this
 
         vm.$root.loadingVisible = true
+        vm.$root.$refs.header.leftOptions.showBack = false
+        vm.$root.$refs.header.title = '报名'
 
         vm.$http.get(locals.api + '/teams').then(({body}) => {
           vm.teams = body.data
           vm.$root.loadingVisible = false
           transition.next()
-          // setTimeout(() => transition.next(), 150)
         })
       }
     }

@@ -6,3 +6,5 @@ test/unit/coverage
 test/e2e/reports
 db.json
 db2.json
+logdb.json
+npm-debug.log*

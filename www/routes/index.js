@@ -10,6 +10,13 @@ var db = low(path.join(__dirname, '../data/db2.json'), {
 });
 db.defaults({})
 
+var logdb = low(path.join(__dirname, '../data/logdb.json'), {
+  storage: require('lowdb/lib/file-async')  // 使用异步存储
+});
+logdb.defaults({
+  apply: []  // 申请记录
+})
+
 const TOKEN = '20160926'
 
 function getClientIp(req) {
@@ -132,6 +139,7 @@ router.post('/team/apply', function (req, res, next) {
 
   var date = moment().format("YYYYMMDD").toString();
   var teamId = req.body.teamId;
+  var teamName = db.get(`${teamId}.teamName`).value();
   var userName = req.body.userName;
   if(!db.has(teamId).value()){
     res.json({
@@ -147,6 +155,24 @@ router.post('/team/apply', function (req, res, next) {
     });
     return;
   }
+
+  // 记录日志
+  logdb.update('apply', function (logs) {
+    if(!logs){
+      logs = [];
+    }
+    logs.push({
+      "teamId": teamId,
+      "teamName": teamName,
+      "userName": userName,
+      "date": date,
+      "timestamp": new Date().getTime(),
+      "ip": getClientIp(req),
+      "userAgent": req.headers['user-agent']
+    });
+    return logs;
+  }).value();
+
   db.update(`${teamId}.apply.date${date}`, function (users) {
     users = (users || []).filter(function (name) {
       return name !== userName
