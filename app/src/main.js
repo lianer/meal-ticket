@@ -64,7 +64,14 @@ router.beforeEach(function (transition) {
     showMore: false
   }
   router.app.$refs.header.title = ''
-  router.app.$refs.header.transition = null
+  router.app.$refs.header.transition = ''
+
+  // Vue.nextTick(function () {
+  //   router.app.$refs.header.transition = `vux-route-header-${direction}`
+  //   Vue.nextTick(function () {
+  //     transition.next()
+  //   })
+  // })
 
   Vue.nextTick(() => transition.next())
 })

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <x-header v-ref:header></x-header>
+    <x-header v-ref:header :title="" :left-options="{showBack: false, backText: ''}"></x-header>
     <router-view :transition="`vux-route-${direction}`"></router-view>
     <loading :show="loadingVisible" :text="loadingText"></loading>
   </div>
@@ -23,19 +23,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  .fadein-transition{
-    transition: all .15s linear .15s;
-    opacity: 1;
-    // transform: scale(1);
-  }
-  .fadein-enter{
-    opacity: 0;
-    // transform: scale(1.5);
-  }
-  .fadein-leave{
-    opacity: 0;
-    // transform: scale(0.5);
-  }
-</style>

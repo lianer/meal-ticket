@@ -127,22 +127,56 @@ a, .vux-tap-active{
   }
 }
 
-// .vux-route-header-forward-transition{
-//   transition: all .5s ease-out;
+
+
+
+// .vux-route-header-forward-transition, .vux-route-header-back-transition{
 //   transform: translateX(0);
-//   -webkit-animation-duration: 0.5s;
-//   animation-duration: 0.5s;
+//   -webkit-animation-duration: .5s;
+//   animation-duration: .5s;
 //   -webkit-animation-fill-mode: both;
 //   animation-fill-mode: both;
+//   -webkit-animation-timing-function: ease-out;
+//   animation-timing-function: ease-out;
 //   -webkit-backface-visibility: hidden;
 //   backface-visibility: hidden;
+//   opacity: 1;
+//   transition: all .5s ease-out;
 // }
 // .vux-route-header-forward-enter{
+//   // opacity: 1;
 //   animation-name: vux-route-header-forward;
+// }
+// .vux-route-header-back-enter{
+//   // opacity: 1;
+//   animation-name: vux-route-header-back;
+// }
+// .vux-route-header-forward-leave{
+//   opacity: 0;
+// }
+// .vux-route-header-back-leave{
+//   opacity: 0;
 // }
 
 // @keyframes vux-route-header-forward{
-  
+//   0%{
+//     transform: translateX(30%);
+//     opacity: 0;
+//   }
+//   100%{
+//     transform: translateX(0%);
+//     opacity: 1;
+//   }
+// }
+// @keyframes vux-route-header-back{
+//   0%{
+//     transform: translateX(-30%);
+//     opacity: 0;
+//   }
+//   100%{
+//     transform: translateX(0%);
+//     opacity: 1;
+//   }
 // }
 
 
