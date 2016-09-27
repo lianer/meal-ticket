@@ -15,7 +15,7 @@ var logdb = low(path.join(__dirname, '../data/logdb.json'), {
 });
 logdb.defaults({
   apply: []  // 申请记录
-})
+});
 
 const TOKEN = '20160926'
 
@@ -132,15 +132,12 @@ router.get('/team/apply', function (req, res, next) {
 
 // 新增团队成员
 router.post('/team/apply', function (req, res, next) {
-  console.log(1, req.headers['x-forwarded-for']);
-  console.log(2, req.headers['x-real-ip']);
-  console.log(3, req.connection.remoteAddress);
-  // console.log(req.headers['user-agent']);
-
   var date = moment().format("YYYYMMDD").toString();
   var teamId = req.body.teamId;
   var teamName = db.get(`${teamId}.teamName`).value();
   var userName = req.body.userName;
+  var ip = getClientIp(req);
+
   if(!db.has(teamId).value()){
     res.json({
       err: 1,
@@ -167,11 +164,25 @@ router.post('/team/apply', function (req, res, next) {
       "userName": userName,
       "date": date,
       "timestamp": new Date().getTime(),
-      "ip": getClientIp(req),
+      "ip": ip,
       "userAgent": req.headers['user-agent']
     });
     return logs;
   }).value();
+
+  // 屏蔽重复ip提交
+  var match = {
+    ip: ip,
+    date: date,
+    teamId: teamId
+  }
+  if(logdb.get('apply').findIndex(match) > -1){
+    res.json({
+      err: 3,
+      msg: ''
+    });
+    return;
+  }
 
   db.update(`${teamId}.apply.date${date}`, function (users) {
     users = (users || []).filter(function (name) {
