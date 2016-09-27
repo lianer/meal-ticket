@@ -4,6 +4,10 @@ var low = require('lowdb')
 var path = require('path');
 var moment = require('moment');
 var _ = require('lodash');
+var xlsx = require('node-xlsx');
+var queuee = require('queuee');
+
+var q = queuee();
 
 var db = low(path.join(__dirname, '../data/db2.json'), {
   storage: require('lowdb/lib/file-async')  // 使用异步存储
@@ -280,6 +284,7 @@ router.get('/user', function (req, res, next) {
     });
     return;
   }
+  // 获取所有报名记录，统计天数
   var apply = db.get(`${teamId}.apply`).value();
   var count = [];
   _.each(apply, function (users, date) {
@@ -297,6 +302,35 @@ router.get('/user', function (req, res, next) {
       count: count
     }
   })
+});
+
+// 导出当天成员excel
+router.get('/team/export', function (req, res, next) {
+  var date = moment().format("YYYYMMDD").toString();
+  var teamId = req.query.teamId;
+  var teamName = '';
+  var teamMember;
+  var data;
+  if(!db.has(teamId).value()){
+    res.json({
+      err: 1,
+      msg: '该团队不存在'
+    })
+    return;
+  }
+  teamName = db.get(`${teamId}.teamName`).value();
+  teamMember = db.get(`${teamId}.apply.date${date}`, []).cloneDeep().value();
+  data = _.map(teamMember, function (user) {
+    return [user]
+  });
+  q.push(function (cb) {
+    var t1 = new Date();
+    var xlsxBuffer = xlsx.build([{name: "Sheet1", data: data}]);
+    res.attachment(`加班报名-${teamName}-${date}.xlsx`);  // 设置文件名
+    res.send(xlsxBuffer);  // 发送buffer
+    var t2 = new Date();
+    setTimeout(cb, 200);
+  });
 });
 
 module.exports = router;
