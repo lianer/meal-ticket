@@ -158,18 +158,18 @@ router.post('/team/apply', function (req, res, next) {
   }
 
   // 屏蔽重复ip提交
-  var match = {
-    ip: ip,
-    date: date,
-    teamId: teamId
-  }
-  if(logdb.get('apply').findIndex(match) > -1){
-    res.json({
-      err: 3,
-      msg: ''
-    });
-    return;
-  }
+  // var match = {
+  //   ip: ip,
+  //   date: date,
+  //   teamId: teamId
+  // }
+  // if(logdb.get('apply').findIndex(match) > -1){
+  //   res.json({
+  //     err: 3,
+  //     msg: ''
+  //   });
+  //   return;
+  // }
 
   // 记录日志
   logdb.update('apply', function (logs) {

@@ -9,6 +9,7 @@ import App from './App.vue'
 import Entry from './Entry.vue'
 import Apply from './Apply.vue'
 import User from './User.vue'
+import Test from './Test.vue'
 
 Vue.use(VueRouter)
 Vue.use(VueResource)
@@ -55,16 +56,16 @@ router.beforeEach(function (transition) {
 
   router.app.direction = direction
 
-  router.app.$refs.header.leftOptions = {
-    backText: '',
-    preventGoBack: false,
-    showBack: true
-  }
-  router.app.$refs.header.rightOptions = {
-    showMore: false
-  }
-  router.app.$refs.header.title = ''
-  router.app.$refs.header.transition = ''
+  // router.app.$refs.header.leftOptions = {
+  //   backText: '',
+  //   preventGoBack: false,
+  //   showBack: true
+  // }
+  // router.app.$refs.header.rightOptions = {
+  //   showMore: false
+  // }
+  // router.app.$refs.header.title = ''
+  // router.app.$refs.header.transition = ''
 
   // Vue.nextTick(function () {
   //   router.app.$refs.header.transition = `vux-route-header-${direction}`
@@ -85,6 +86,9 @@ router.map({
   },
   '/:team/:user': {
     component: User
+  },
+  '/test': {
+    component: Test
   }
 })
 

@@ -1,27 +1,28 @@
 <template>
   <div class="page-user">
-    <div class="count">
+
+    <x-header :title="userName"></x-header>
+
+    <div class="avatar">
+      <img src="/static/img/avatar/0.jpg">
+    </div>
+
+    <div class="total">
       <span>{{teamName}} {{userName}} 已加班 {{count}} 天</span>
     </div>
+
+    <!-- <div class="count">
+      <span>{{teamName}} {{userName}} 已加班 {{count}} 天</span>
+    </div> -->
   </div>
 </template>
 
 <script>
-  import Group from 'vux/src/components/group'
-  import Cell from 'vux/src/components/cell'
-  import xInput from 'vux/src/components/x-input'
-  import icon from 'vux/src/components/icon'
-  import toast from 'vux/src/components/toast'
-  import confirm from 'vux/src/components/confirm'
+  import xHeader from 'components/x-header.vue'
 
   export default {
     components: {
-      Group,
-      Cell,
-      xInput,
-      icon,
-      toast,
-      confirm
+      xHeader
     },
     data () {
       return {
@@ -38,7 +39,6 @@
         vm.teamId = vm.$route.params.team
         vm.userName = vm.$route.params.user
         vm.$root.loadingVisible = true
-        vm.$root.$refs.header.title = vm.userName
 
         vm.$http({
           method: 'get',
@@ -61,7 +61,6 @@
           vm.count = body.data.count.length
           vm.$root.loadingVisible = false
           transition.next()
-          // setTimeout(() => transition.next(), 150)
         })
       }
     }
@@ -73,16 +72,19 @@
 </style>
 
 <style lang='scss' scoped>
-  .count{
-    padding-top: 30px;
+  .avatar{
+    img{
+      display: block;
+      width: 120px;
+      height: 120px;
+      margin: 24px auto;
+      border-radius: 120px;
+      box-shadow: 0 0 8px 1px rgba(0, 0, 0, .1);
+    }
+  }
+  .total{
+    margin: 12px 0;
     font-size: 12px;
     text-align: center;
-    color: #666;
-    span{
-      display: inline-block;
-      background: #eee;
-      padding: 2px 30px;
-      border-radius: 20px;
-    }
   }
 </style>

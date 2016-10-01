@@ -1,27 +1,26 @@
 <template>
   <div class="page-apply">
-    <group title="" v-if="showInput">
-      <x-input 
+
+    <x-header :title="teamName"></x-header>
+
+    <div class="search" v-show="1">
+      <input type="search" 
+        v-model="value" 
         :placeholder="placeholder" 
-        :value.sync="value" 
-        :required="false" 
-        :show-clear="false"
         @keyup.enter="confirmSubmit" 
         @keydown.tab.prevent="useLastApplyUserName"
-        >
-        <!-- <icon type="search" @click="confirmSubmit"></icon> -->
-        <icon type="success_no_circle" @click="confirmSubmit"></icon>
-        <!-- <span @click="confirmSubmit"> ok </span> -->
-      </x-input>
-    </group>
-    
-    <div class="count"><span>{{today}} 已报名{{member.length}}人</span></div>
-    
-    <group title="成员列表">
-      <cell v-for="item in member" :title="item" :link="'/' + teamId + '/' + item">
-        <!-- <icon type="clear" @click.stop="confirmRemove(item)"></icon> -->
-      </cell>
-    </group>
+      >
+    </div>
+
+    <div class="total"><span>{{today}} 已报名{{member.length}}人</span></span></div>
+
+    <div class="list">
+      <x-panel v-for="item in member" :title="item" v-link="'/' + teamId + '/' + item" :summary="'我为加班而自豪'">
+        <span slot="left">
+          <img :src="'/static/img/avatar/' + $index + '.jpg'">
+        </span>
+      </x-panel>
+    </div>
     
     <toast :show.sync="already" :type="'text'">该成员已存在</toast>
     
@@ -34,21 +33,18 @@
   import moment from 'moment'
   import store from 'store'
 
-  import Group from 'vux/src/components/group'
-  import Cell from 'vux/src/components/cell'
-  import xInput from 'vux/src/components/x-input'
-  import icon from 'vux/src/components/icon'
   import toast from 'vux/src/components/toast'
   import confirm from 'vux/src/components/confirm'
 
+  import xHeader from 'components/x-header.vue'
+  import xPanel from 'components/x-panel.vue'
+
   export default {
     components: {
-      Group,
-      Cell,
-      xInput,
-      icon,
       toast,
-      confirm
+      confirm,
+      xHeader,
+      xPanel
     },
     data () {
       return {
@@ -69,7 +65,7 @@
       placeholder: function () {
         var vm = this
         if (vm.lastApplyUserName) {
-          return vm.lastApplyUserName
+          return vm.lastApplyUserName + '  [ tab ]'
         }
         return '请输入你的姓名，一天只能提交一次'
       }
@@ -197,7 +193,7 @@
           }
         }).then(function ({body}) {
           vm.teamName = body.data.teamName
-          vm.$root.$refs.header.title = vm.teamName
+          // vm.$root.$refs.header.title = vm.teamName
         }).then(function () {
           return vm.update()
         }).then(function () {
@@ -211,29 +207,45 @@
   }
 </script>
 
-<style>
+<style lang='scss'>
   @import '~vux/dist/vux.css';
 </style>
 
 <style lang='scss' scoped>
-  .count{
-    padding-top: 30px;
+  .total{
+    margin: 12px 0;
     font-size: 12px;
     text-align: center;
-    color: #666;
-    span{
+  }
+  .list{
+    margin: 0 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .1);
+    img{
       display: inline-block;
-      background: #eee;
-      padding: 2px 30px;
-      border-radius: 20px;
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+      border-radius: 100px;
     }
   }
-</style>
-
-<style lang='scss' scoped>
   .page-apply{
     .weui_cell{
       cursor: pointer;
+    }
+  }
+  .search{
+    margin: 24px 12px;
+    input{
+      width: 100%;
+      height: 32px;
+      padding: 0 12px 0 12px;
+      border: none;
+      border-radius: 8px;
+      background: #e2e2e2;
+      outline: none;
+      -webkit-appearance: none;
     }
   }
 </style>

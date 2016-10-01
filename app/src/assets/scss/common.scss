@@ -9,15 +9,16 @@ body{
 
 #app{
   width: 100%;
-  max-width: 640px;
+  // max-width: 480px;
   min-height: 100vh;
   margin: 0 auto;
+  background: #fbf2ed;
   box-shadow: 0 0 50px rgba(0, 0, 0, .05);
   overflow-x: hidden;
-  -webkit-will-change: transform;
-  will-change: transform;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
+  // -webkit-will-change: transform;
+  // will-change: transform;
+  // -webkit-transform: translateZ(0);
+  // transform: translateZ(0);
   .vux-header{
     background: #175392;
     // background: -webkit-linear-gradient(top, #222, #444);
