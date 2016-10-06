@@ -1,6 +1,5 @@
 <template>
-  <div>
-  
+  <div :style="{'min-height': $root.clientHeight}">
     <v-header :title="'报名'">
       <span slot="left"></span>
     </v-header>

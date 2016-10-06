@@ -1,5 +1,5 @@
 <template>
-  <div class="page-user">
+  <div class="page-user" :style="{'min-height': $root.clientHeight}">
 
     <v-header :title="userName"></v-header>
 

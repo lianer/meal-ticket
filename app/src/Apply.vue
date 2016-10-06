@@ -1,5 +1,5 @@
 <template>
-  <div class="page-apply">
+  <div class="page-apply" :style="{'min-height': $root.clientHeight}">
 
     <v-header :title="teamName">
       <a :href="locals.api + '/team/export?teamId=' + teamId" slot="right" class="export">Export</a>

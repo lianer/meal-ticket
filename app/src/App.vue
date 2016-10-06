@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :style="{'min-height': $root.clientHeight}">
     <router-view :transition="`vux-route-${direction}`"></router-view>
     <loading :show="loadingVisible" :text="loadingText"></loading>
   </div>
@@ -15,8 +15,22 @@
       return {
         direction: 'current',
         loadingText: 'loading...',
-        loadingVisible: false
+        loadingVisible: false,
+        clientHeight: 0
       }
+    },
+    created: function () {
+      var vm = this
+      var resizeTimer = -1
+
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer)
+        resizeTimer = setTimeout(function () {
+          vm.clientHeight = document.documentElement.clientHeight + 'px'
+        }, 50)
+      })
+      vm.clientHeight = document.documentElement.clientHeight + 'px'
+      console.log(vm)
     }
   }
 </script>
