@@ -224,6 +224,7 @@
 <style lang='scss' scoped>
   .export{
     line-height: 40px;
+    color: #333;
   }
   .total{
     margin: 12px 0;
