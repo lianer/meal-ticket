@@ -1,7 +1,7 @@
 git pull origin master
-cnpm i
+npm i
 cd ./app
-cnpm i
+npm i
 cd ../www
-cnpm i
+npm i
 pm2 restart ticket-api
