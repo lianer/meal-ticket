@@ -1,21 +1,21 @@
 <template>
-  <x-header :title="'Test'"></x-header>
+  <v-header :title="'Test'"></v-header>
 
   <div>
-    <x-panel :title="'标题'" :summary="''"></x-panel>
-    <x-panel :title="'标题'" :summary="''"></x-panel>
-    <x-panel :title="'标题'" :summary="''"></x-panel>
+    <v-panel :title="'标题'" :summary="''"></v-panel>
+    <v-panel :title="'标题'" :summary="''"></v-panel>
+    <v-panel :title="'标题'" :summary="''"></v-panel>
   </div>
 </template>
 
 <script>
-  import xHeader from 'components/x-header.vue'
-  import xPanel from 'components/x-panel.vue'
+  import vHeader from 'components/v-header.vue'
+  import vPanel from 'components/v-panel.vue'
 
   export default {
     components: {
-      xHeader,
-      xPanel
+      vHeader,
+      vPanel
     }
   }
 </script>

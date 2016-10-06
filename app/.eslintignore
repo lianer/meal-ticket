@@ -1,2 +1,4 @@
 build/*.js
 config/*.js
+locals.config.dev.js
+locals.config.prod.js

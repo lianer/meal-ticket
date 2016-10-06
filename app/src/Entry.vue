@@ -1,12 +1,12 @@
 <template>
   <div>
   
-    <x-header :title="'报名'">
+    <v-header :title="'报名'">
       <span slot="left"></span>
-    </x-header>
+    </v-header>
 
     <div class="list">
-      <x-panel v-for="(id, team) in teams" :title="team.teamName" v-link="`/${id}`">
+      <v-panel v-for="(id, team) in teams" :title="team.teamName" v-link="`/${id}`">
     </div>
 
     <!-- <group>
@@ -16,20 +16,13 @@
 </template>
 
 <script>
-  import Group from 'vux/src/components/group'
-  import Cell from 'vux/src/components/cell'
-  import xInput from 'vux/src/components/x-input'
-
-  import xHeader from 'components/x-header.vue'
-  import xPanel from 'components/x-panel.vue'
+  import vHeader from 'components/v-header.vue'
+  import vPanel from 'components/v-panel.vue'
 
   export default {
     components: {
-      Group,
-      Cell,
-      xInput,
-      xHeader,
-      xPanel
+      vHeader,
+      vPanel
     },
     data () {
       return {

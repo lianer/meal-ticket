@@ -1,7 +1,9 @@
 <template>
   <div class="page-apply">
 
-    <x-header :title="teamName"></x-header>
+    <v-header :title="teamName">
+      <a :href="locals.api + '/team/export?teamId=' + teamId" slot="right" class="export">Export</a>
+    </v-header>
 
     <div class="search" v-show="1">
       <input type="search" 
@@ -10,16 +12,21 @@
         @keyup.enter="confirmSubmit" 
         @keydown.tab.prevent="useLastApplyUserName"
       >
+      <span class="submit" @click="confirmSubmit">提交</span>
     </div>
 
     <div class="total"><span>{{today}} 已报名{{member.length}}人</span></span></div>
 
-    <div class="list">
-      <x-panel v-for="item in member" :title="item" v-link="'/' + teamId + '/' + item" :summary="'我为加班而自豪'">
+    <div class="list" v-if="member.length">
+      <v-panel v-for="(index, item) in member" 
+        v-link="'/' + teamId + '/' + item.name"
+        :title="item.name" 
+        :summary="item.intro"
+        >
         <span slot="left">
-          <img :src="'/static/img/avatar/' + $index + '.jpg'">
+          <img :src="'/static/img/avatar/' + item.avatar + '.jpg'">
         </span>
-      </x-panel>
+      </v-panel>
     </div>
     
     <toast :show.sync="already" :type="'text'">该成员已存在</toast>
@@ -32,19 +39,20 @@
 <script>
   import moment from 'moment'
   import store from 'store'
+  import _ from 'lodash'
 
   import toast from 'vux/src/components/toast'
   import confirm from 'vux/src/components/confirm'
 
-  import xHeader from 'components/x-header.vue'
-  import xPanel from 'components/x-panel.vue'
+  import vHeader from 'components/v-header.vue'
+  import vPanel from 'components/v-panel.vue'
 
   export default {
     components: {
       toast,
       confirm,
-      xHeader,
-      xPanel
+      vHeader,
+      vPanel
     },
     data () {
       return {
@@ -147,7 +155,9 @@
             teamId: vm.teamId
           }
         }).then(function ({body}) {
-          vm.member = body.data
+          if (!_.isEqual(vm.member, body.data)) {
+            vm.member = body.data
+          }
         })
       },
       useLastApplyUserName: function () {
@@ -212,6 +222,9 @@
 </style>
 
 <style lang='scss' scoped>
+  .export{
+    line-height: 40px;
+  }
   .total{
     margin: 12px 0;
     font-size: 12px;
@@ -228,6 +241,7 @@
       height: 40px;
       margin-right: 10px;
       border-radius: 100px;
+      object-fit: cover;
     }
   }
   .page-apply{
@@ -236,16 +250,32 @@
     }
   }
   .search{
-    margin: 24px 12px;
+    position: relative;
+    margin: 12px 12px;
     input{
       width: 100%;
-      height: 32px;
-      padding: 0 12px 0 12px;
+      height: 36px;
+      padding: 0 72px 0 12px;
       border: none;
       border-radius: 8px;
-      background: #e2e2e2;
+      font-size: 14px;
+      background: #e5e5e5;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, .02) inset;
       outline: none;
       -webkit-appearance: none;
+    }
+    .submit{
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 60px;
+      height: 100%;
+      background: #1bc769;
+      text-align: center;
+      line-height: 36px;
+      border-radius: 0 8px 8px 0;
+      color: #fff;
+      cursor: pointer;
     }
   }
 </style>
