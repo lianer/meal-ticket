@@ -5,7 +5,7 @@
       <a :href="locals.api + '/team/export?teamId=' + teamId" slot="right" class="export">Export</a>
     </v-header>
 
-    <div class="search" v-show="1">
+    <div class="search" v-show="showInput">
       <input type="search" 
         v-model="value" 
         :placeholder="placeholder" 
