@@ -23,6 +23,8 @@
       var vm = this
       var resizeTimer = -1
 
+      window.gvm = vm
+
       window.addEventListener('resize', function () {
         clearTimeout(resizeTimer)
         resizeTimer = setTimeout(function () {
@@ -30,7 +32,6 @@
         }, 50)
       })
       vm.clientHeight = document.documentElement.clientHeight + 'px'
-      console.log(vm)
     }
   }
 </script>
