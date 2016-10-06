@@ -1,27 +1,33 @@
 <template>
   <div class="page-apply">
-    <group title="" v-if="showInput">
-      <x-input 
+
+    <v-header :title="teamName">
+      <a :href="locals.api + '/team/export?teamId=' + teamId" slot="right" class="export">Export</a>
+    </v-header>
+
+    <div class="search" v-show="1">
+      <input type="search" 
+        v-model="value" 
         :placeholder="placeholder" 
-        :value.sync="value" 
-        :required="false" 
-        :show-clear="false"
         @keyup.enter="confirmSubmit" 
         @keydown.tab.prevent="useLastApplyUserName"
+      >
+      <span class="submit" @click="confirmSubmit">提交</span>
+    </div>
+
+    <div class="total"><span>{{today}} 已报名{{member.length}}人</span></span></div>
+
+    <div class="list" v-if="member.length">
+      <v-panel v-for="(index, item) in member" 
+        v-link="'/' + teamId + '/' + item.name"
+        :title="item.name" 
+        :summary="item.intro"
         >
-        <!-- <icon type="search" @click="confirmSubmit"></icon> -->
-        <icon type="success_no_circle" @click="confirmSubmit"></icon>
-        <!-- <span @click="confirmSubmit"> ok </span> -->
-      </x-input>
-    </group>
-    
-    <div class="count"><span>{{today}} 已报名{{member.length}}人</span></div>
-    
-    <group title="成员列表">
-      <cell v-for="item in member" :title="item" :link="'/' + teamId + '/' + item">
-        <!-- <icon type="clear" @click.stop="confirmRemove(item)"></icon> -->
-      </cell>
-    </group>
+        <span slot="left">
+          <img :src="'/static/img/avatar/' + item.avatar + '.jpg'">
+        </span>
+      </v-panel>
+    </div>
     
     <toast :show.sync="already" :type="'text'">该成员已存在</toast>
     
@@ -33,22 +39,20 @@
 <script>
   import moment from 'moment'
   import store from 'store'
+  import _ from 'lodash'
 
-  import Group from 'vux/src/components/group'
-  import Cell from 'vux/src/components/cell'
-  import xInput from 'vux/src/components/x-input'
-  import icon from 'vux/src/components/icon'
   import toast from 'vux/src/components/toast'
   import confirm from 'vux/src/components/confirm'
 
+  import vHeader from 'components/v-header.vue'
+  import vPanel from 'components/v-panel.vue'
+
   export default {
     components: {
-      Group,
-      Cell,
-      xInput,
-      icon,
       toast,
-      confirm
+      confirm,
+      vHeader,
+      vPanel
     },
     data () {
       return {
@@ -69,7 +73,7 @@
       placeholder: function () {
         var vm = this
         if (vm.lastApplyUserName) {
-          return vm.lastApplyUserName
+          return vm.lastApplyUserName + '  [ tab ]'
         }
         return '请输入你的姓名，一天只能提交一次'
       }
@@ -151,7 +155,9 @@
             teamId: vm.teamId
           }
         }).then(function ({body}) {
-          vm.member = body.data
+          if (!_.isEqual(vm.member, body.data)) {
+            vm.member = body.data
+          }
         })
       },
       useLastApplyUserName: function () {
@@ -197,7 +203,7 @@
           }
         }).then(function ({body}) {
           vm.teamName = body.data.teamName
-          vm.$root.$refs.header.title = vm.teamName
+          // vm.$root.$refs.header.title = vm.teamName
         }).then(function () {
           return vm.update()
         }).then(function () {
@@ -211,28 +217,64 @@
   }
 </script>
 
-<style>
+<style lang='scss'>
   @import '~vux/dist/vux.css';
 </style>
 
 <style lang='scss' scoped>
-  .count{
-    padding-top: 30px;
+  .export{
+    line-height: 40px;
+  }
+  .total{
+    margin: 12px 0;
     font-size: 12px;
     text-align: center;
-    color: #666;
-    span{
+  }
+  .list{
+    margin: 0 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .1);
+    img{
       display: inline-block;
-      background: #eee;
-      padding: 2px 30px;
-      border-radius: 20px;
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+      border-radius: 100px;
+      object-fit: cover;
     }
   }
-</style>
-
-<style lang='scss' scoped>
   .page-apply{
     .weui_cell{
+      cursor: pointer;
+    }
+  }
+  .search{
+    position: relative;
+    margin: 12px 12px;
+    input{
+      width: 100%;
+      height: 36px;
+      padding: 0 72px 0 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #e5e5e5;
+      box-shadow: 0 0 10px 0 rgba(0, 0, 0, .02) inset;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    .submit{
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 60px;
+      height: 100%;
+      background: #1bc769;
+      text-align: center;
+      line-height: 36px;
+      border-radius: 0 8px 8px 0;
+      color: #fff;
       cursor: pointer;
     }
   }

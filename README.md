@@ -52,3 +52,20 @@ node ./server.js
 
 发布到线上使用nginx托管，还需要做很多工作，见文章[webpack+vue+vux+express+lowdb](http://imlianer.com/a/webpack-vue-vux-express-lowdb)
 
+## 示例
+```bash
+# bash1
+cd D:/_repos/meal-ticket/www
+nodemon ./bin/www
+# bash2
+cd D:/_repos/meal-ticket/app
+$env:port=8022;npm run dev
+# bash3
+cd D:/_repos/meal-ticket/app
+node server.js
+# bash4
+cd D:/_repos/meal-ticket/app
+npm run build
+```
+
+

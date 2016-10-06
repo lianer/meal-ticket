@@ -1,34 +1,36 @@
 <template>
   <div class="page-user">
-    <div class="count">
+
+    <v-header :title="userName"></v-header>
+
+    <div class="avatar">
+      <img :src="`/static/img/avatar/${info.avatar}.jpg`">
+    </div>
+
+    <div class="intro">
+      {{info.intro}}
+    </div>
+
+    <div class="total">
       <span>{{teamName}} {{userName}} 已加班 {{count}} 天</span>
     </div>
   </div>
 </template>
 
 <script>
-  import Group from 'vux/src/components/group'
-  import Cell from 'vux/src/components/cell'
-  import xInput from 'vux/src/components/x-input'
-  import icon from 'vux/src/components/icon'
-  import toast from 'vux/src/components/toast'
-  import confirm from 'vux/src/components/confirm'
+  import vHeader from 'components/v-header.vue'
 
   export default {
     components: {
-      Group,
-      Cell,
-      xInput,
-      icon,
-      toast,
-      confirm
+      vHeader
     },
     data () {
       return {
         teamId: '',
         teamName: '',
         userName: '',
-        count: 0
+        count: 0,
+        info: {}
       }
     },
     route: {
@@ -38,7 +40,6 @@
         vm.teamId = vm.$route.params.team
         vm.userName = vm.$route.params.user
         vm.$root.loadingVisible = true
-        vm.$root.$refs.header.title = vm.userName
 
         vm.$http({
           method: 'get',
@@ -59,9 +60,9 @@
           }
         }).then(function ({body}) {
           vm.count = body.data.count.length
+          vm.info = body.data.info
           vm.$root.loadingVisible = false
           transition.next()
-          // setTimeout(() => transition.next(), 150)
         })
       }
     }
@@ -73,16 +74,25 @@
 </style>
 
 <style lang='scss' scoped>
-  .count{
-    padding-top: 30px;
+  .page-user{
+    background: #fff;
+  }
+  .avatar{
+    img{
+      display: block;
+      width: 180px;
+      height: 180px;
+      margin: 24px auto;
+      border-radius: 120px;
+      object-fit: cover;
+    }
+  }
+  .intro{
+    text-align: center;
+  }
+  .total{
+    margin: 12px 0;
     font-size: 12px;
     text-align: center;
-    color: #666;
-    span{
-      display: inline-block;
-      background: #eee;
-      padding: 2px 30px;
-      border-radius: 20px;
-    }
   }
 </style>

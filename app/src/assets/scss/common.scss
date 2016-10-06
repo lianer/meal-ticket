@@ -1,3 +1,25 @@
+// fixed the inherited min-height bug
+html, body{
+  height: 100%;
+}
+#app{
+  height: 1px;
+  min-height: 100%;
+}
+[class^="page-"]{
+  // 这样min-height就能成功的生效了
+  min-height: 100%;
+  // 但内部的子元素如果有margin，那么会传递到到父级.page-apply，
+  // 并传递到.page-apply的外部，所以需要一个空的元素来清除margin
+  &::after{
+    content: "";
+    display: block;
+    height: 1px;
+  }
+}
+
+html{
+}
 body{
   overflow-x: hidden;
   font-family: 'Microsoft YaHei',Helvetica Neue,Helvetica,Arial,sans-serif !important;
@@ -7,24 +29,24 @@ body{
   display: none;
 }
 
+a{
+  color: inherit;
+}
+
 #app{
   width: 100%;
-  max-width: 640px;
-  min-height: 100vh;
+  // max-width: 480px;
   margin: 0 auto;
+  background: #fbf2ed;
   box-shadow: 0 0 50px rgba(0, 0, 0, .05);
   overflow-x: hidden;
-  -webkit-will-change: transform;
-  will-change: transform;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  .vux-header{
-    background: #175392;
-    // background: -webkit-linear-gradient(top, #222, #444);
-  }
-  .weui_dialog{
-    top: 50vh;
-  }
+  // -webkit-will-change: transform;
+  // will-change: transform;
+  // -webkit-transform: translateZ(0);
+  // transform: translateZ(0);
+  // .weui_dialog{
+  //   top: 50vh;
+  // }
 }
 
 a, .vux-tap-active{

@@ -4,8 +4,13 @@
 | team 团队
   | name 团队名称
   | apply 团队申请
-    | date 日期
-      | member 申请列表
+    | date 日期 / userName list
+
+  | info 成员信息
+    | date 日期 / userInfo list
+      | name 成员姓名
+      | avatar 成员头像
+      | intro 成员介绍
 ```
 
 ```
@@ -13,9 +18,16 @@
   "yypt": {
     "name": "应用平台",
     "apply": {
-      "20160923": {
-        member: ["楼云龙"]
+      "date20160923": {
+        "member": ["楼云龙"]
       }
+    },
+    "info": {
+      "date20160923": [{
+        "name": "楼云龙",
+        "avatar": "1",
+        "intro": "我为加班而自豪"
+      }]
     }
   }
 }

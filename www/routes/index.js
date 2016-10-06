@@ -29,7 +29,29 @@ function getClientIp(req) {
     req.connection.remoteAddress || 
     req.socket.remoteAddress || 
     req.connection.socket.remoteAddress;
-};
+}
+
+function setUserInfo(teamId, date, userName, avatar /* 头像，可选 */, intro /* 介绍，可选 */) {
+  db.update(`${teamId}.info.date${date}`, function (info) {
+    if(!info){
+      info = [];
+    }
+    if(!_.find(info, {name: userName})){
+      info.push({
+        name: userName,
+        avatar: avatar || Math.floor(Math.random() * 41) + "",
+        intro: intro || "我为加班而自豪"
+      });
+    }
+    return info;
+  }).value();
+}
+
+function getUserInfo(teamId, date, userName) {
+  return db.get(`${teamId}.info.date${date}`).find({
+    name: userName
+  }).value() || null;
+}
 
 // 获取团队列表
 router.get('/teams', function (req, res, next) {
@@ -127,10 +149,15 @@ router.get('/team/apply', function (req, res, next) {
     return;
   }
   var apply = db.get(`${teamId}.apply.date${date}`, []).cloneDeep().reverse().value();
+  var member = apply.map(function (userName) {
+    return getUserInfo(teamId, date, userName);
+  }).filter(function (item) {
+    return !!item;
+  });
   res.json({
     err: 0,
     msg: '',
-    data: apply
+    data: member
   });
 });
 
@@ -158,18 +185,18 @@ router.post('/team/apply', function (req, res, next) {
   }
 
   // 屏蔽重复ip提交
-  var match = {
-    ip: ip,
-    date: date,
-    teamId: teamId
-  }
-  if(logdb.get('apply').findIndex(match) > -1){
-    res.json({
-      err: 3,
-      msg: ''
-    });
-    return;
-  }
+  // var match = {
+  //   ip: ip,
+  //   date: date,
+  //   teamId: teamId
+  // }
+  // if(logdb.get('apply').findIndex(match) > -1){
+  //   res.json({
+  //     err: 3,
+  //     msg: ''
+  //   });
+  //   return;
+  // }
 
   // 记录日志
   logdb.update('apply', function (logs) {
@@ -195,6 +222,9 @@ router.post('/team/apply', function (req, res, next) {
     users.push(userName);
     return users;
   }).value();
+
+  setUserInfo(teamId, date, userName);
+
   var apply = db.get(`${teamId}.apply.date${date}`).value();
   res.json({
     err: 0,
@@ -268,6 +298,7 @@ router.delete('/team/clear', function (req, res, next) {
 
 // 获取成员信息
 router.get('/user', function (req, res, next) {
+  var date = moment().format("YYYYMMDD").toString();
   var teamId = req.query.teamId;
   var userName = req.query.userName;
   if(!db.has(teamId).value()){
@@ -295,11 +326,14 @@ router.get('/user', function (req, res, next) {
       count.push(date.replace('date', ''));
     }
   });
+  // 获取成员信息，头像和介绍
+  var info = getUserInfo(teamId, date, userName);
   res.json({
     err: 0,
     msg: '',
     data: {
-      count: count
+      count: count,
+      info: info
     }
   })
 });
@@ -332,5 +366,6 @@ router.get('/team/export', function (req, res, next) {
     setTimeout(cb, 200);
   });
 });
+
 
 module.exports = router;
