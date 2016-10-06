@@ -190,7 +190,8 @@ router.post('/team/apply', function (req, res, next) {
     date: date,
     teamId: teamId
   }
-  if(logdb.get('apply').findIndex(match) > -1){
+
+  if(logdb.get('apply').findIndex(match).value() > -1){
     res.json({
       err: 3,
       msg: ''
