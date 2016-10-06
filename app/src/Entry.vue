@@ -8,10 +8,6 @@
     <div class="list" v-if="teams">
       <v-panel v-for="(id, team) in teams" :title="team.teamName" v-link="`/${id}`">
     </div>
-
-    <!-- <group>
-      <cell v-for="(id, team) in teams" :title="team.teamName" :link="`/${id}`"></cell>
-    </group> -->
   </div>
 </template>
 
@@ -34,8 +30,6 @@
         var vm = this
 
         vm.$root.loadingVisible = true
-        // vm.$root.$refs.header.leftOptions.showBack = false
-        // vm.$root.$refs.header.title = '报名'
 
         vm.$http.get(locals.api + '/teams').then(({body}) => {
           vm.teams = body.data
