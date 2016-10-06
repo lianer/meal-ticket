@@ -5,7 +5,7 @@
       <span slot="left"></span>
     </v-header>
 
-    <div class="list">
+    <div class="list" v-if="teams && teams.length">
       <v-panel v-for="(id, team) in teams" :title="team.teamName" v-link="`/${id}`">
     </div>
 

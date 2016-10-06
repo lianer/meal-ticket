@@ -17,7 +17,7 @@
 
     <div class="total"><span>{{today}} 已报名{{member.length}}人</span></span></div>
 
-    <div class="list" v-if="member.length">
+    <div class="list" v-if="member && member.length">
       <v-panel v-for="(index, item) in member" 
         v-link="'/' + teamId + '/' + item.name"
         :title="item.name" 
