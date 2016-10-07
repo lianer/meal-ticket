@@ -1,32 +1,37 @@
 <template>
-  <div class="page-apply" :style="{'min-height': $root.clientHeight}">
-
-    <v-header :title="teamName">
-      <a :href="locals.api + '/team/export?teamId=' + teamId" slot="right" class="export">Export</a>
-    </v-header>
-
-    <div class="search" v-show="showInput">
-      <input type="search" 
-        v-model="value" 
-        :placeholder="placeholder" 
-        @keyup.enter="confirmSubmit" 
-        @keydown.tab.prevent="useLastApplyUserName"
-      >
-      <span class="submit" @click="confirmSubmit">提交</span>
+  <div class="page-apply">
+    <div class="page-wrap" :style="{'min-height': $root.clientHeight}">
+      <v-header :title="teamName">
+        <a :href="locals.api + '/team/export?teamId=' + teamId" slot="right" class="export">Export</a>
+      </v-header>
+      
+      <div class="search" v-show="showInput">
+        <input type="search" 
+          v-model="value" 
+          :placeholder="placeholder" 
+          @keyup.enter="confirmSubmit" 
+          @keydown.tab.prevent="useLastApplyUserName"
+        >
+        <span class="submit" @click="confirmSubmit">提交</span>
+      </div>
+      
+      <div class="total"><span>{{today}} 已报名{{member.length}}人</span></span></div>
+      
+      <div class="list" v-if="member && member.length">
+        <v-panel v-for="(index, item) in member" 
+          v-link="'/' + teamId + '/' + item.name"
+          :title="item.name" 
+          :summary="item.intro"
+          >
+          <span slot="left">
+            <img :src="'/static/img/avatar/' + item.avatar + '.jpg'">
+          </span>
+        </v-panel>
+      </div>
     </div>
 
-    <div class="total"><span>{{today}} 已报名{{member.length}}人</span></span></div>
-
-    <div class="list" v-if="member && member.length">
-      <v-panel v-for="(index, item) in member" 
-        v-link="'/' + teamId + '/' + item.name"
-        :title="item.name" 
-        :summary="item.intro"
-        >
-        <span slot="left">
-          <img :src="'/static/img/avatar/' + item.avatar + '.jpg'">
-        </span>
-      </v-panel>
+    <div class="page-sticky-footer">
+      数据将会每日统计上报，请使用真实姓名
     </div>
     
     <toast :show.sync="already" :type="'text'">该成员已存在</toast>
@@ -105,6 +110,11 @@
         vm.showInput = false
 
         store.set('lastApplyUserName', value)
+        store.set('whoami', {
+          date: moment().format('YYYY-MM-DD'),
+          teamId: vm.teamId,
+          userName: value
+        })
 
         // keydown后同步修改vm.value，不会生效
         // 可能是插件监听keyup事件后重新赋值
@@ -222,6 +232,21 @@
 </style>
 
 <style lang='scss' scoped>
+  $page-sticky-footer-height: 50px;
+  .page-wrap{
+    margin-bottom: -$page-sticky-footer-height;
+    &:after{
+      content: "";
+      display: block;
+      height: $page-sticky-footer-height;
+    }
+  }
+  .page-sticky-footer{
+    font-size: 12px;
+    line-height: $page-sticky-footer-height;
+    text-align: center;
+    color: #999;
+  }
   .export{
     line-height: 40px;
     color: #333;
@@ -233,7 +258,7 @@
   }
   .list{
     margin: 0 12px;
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
     border-radius: 8px;
     box-shadow: 0 0 5px 1px rgba(0, 0, 0, .1);
     img{
@@ -277,6 +302,18 @@
       border-radius: 0 8px 8px 0;
       color: #fff;
       cursor: pointer;
+    }
+  }
+</style>
+
+<style lang='scss'>
+  .page-apply{
+    .list{
+      .v-panel{
+        .center{
+          min-height: 40px;
+        }
+      }
     }
   }
 </style>
