@@ -29,50 +29,63 @@ const router = new VueRouter({
 })
 
 // 路由跳转处理，包括动效控制
-var historyStack = []
+// var historyStack = []
+// router.beforeEach(function (transition) {
+//   var fromPath = transition.from.path
+//   var toPath = transition.to.path
+//   var direction
+//   var index = historyStack.length - 1
+
+//   if (!fromPath) {
+//     // 首次进入
+//     direction = 'current'
+//     historyStack.push(toPath)
+//   } else if (toPath === historyStack[index]) {
+//     // 刷新
+//     direction = 'current'
+//   } else if (toPath === historyStack[index - 1]) {
+//     // 后退
+//     direction = 'back'
+//     historyStack.splice(index, 1)
+//   } else {
+//     // 前进
+//     direction = 'forward'
+//     historyStack.push(toPath)
+//   }
+
+//   router.app.direction = direction
+
+//   Vue.nextTick(() => transition.next())
+// })
+
+var getPathLength = function (str) {
+  var arr = str.split('/').filter(function (str) {
+    return str !== ''
+  })
+  return arr.length
+}
+
+// 新路由跳转逻辑
 router.beforeEach(function (transition) {
   var fromPath = transition.from.path
   var toPath = transition.to.path
   var direction
-  var index = historyStack.length - 1
 
-  // console.log(toPath, historyStack, index)
+  if (fromPath) {
+    console.log(fromPath, toPath)
+  }
+
   if (!fromPath) {
-    // 首次进入
     direction = 'current'
-    historyStack.push(toPath)
-  } else if (toPath === historyStack[index]) {
-    // 刷新
-    direction = 'current'
-  } else if (toPath === historyStack[index - 1]) {
-    // 后退
-    direction = 'back'
-    historyStack.splice(index, 1)
-  } else {
-    // 前进
+  } else if (getPathLength(fromPath) < getPathLength(toPath)) {
     direction = 'forward'
-    historyStack.push(toPath)
+  } else if (getPathLength(fromPath) > getPathLength(toPath)) {
+    direction = 'back'
+  } else {
+    direction = 'current'
   }
 
   router.app.direction = direction
-
-  // router.app.$refs.header.leftOptions = {
-  //   backText: '',
-  //   preventGoBack: false,
-  //   showBack: true
-  // }
-  // router.app.$refs.header.rightOptions = {
-  //   showMore: false
-  // }
-  // router.app.$refs.header.title = ''
-  // router.app.$refs.header.transition = ''
-
-  // Vue.nextTick(function () {
-  //   router.app.$refs.header.transition = `vux-route-header-${direction}`
-  //   Vue.nextTick(function () {
-  //     transition.next()
-  //   })
-  // })
 
   Vue.nextTick(() => transition.next())
 })
