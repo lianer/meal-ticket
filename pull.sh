@@ -1,6 +1,6 @@
 export NODE_ENV="production"
 export PORT=4004
-git pull origin master
+git pull
 npm i
 cd ./app
 npm i
