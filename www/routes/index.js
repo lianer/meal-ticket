@@ -192,6 +192,9 @@ router.post('/team/apply', function (req, res, next) {
   }
 
   if(logdb.get('apply').findIndex(match).value() > -1){
+    try{
+      console.error(match)
+    }catch(e){}
     res.json({
       err: 3,
       msg: ''

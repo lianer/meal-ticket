@@ -12,7 +12,7 @@
           @keyup.enter="confirmSubmit" 
           @keydown.tab.prevent="useLastApplyUserName"
         >
-        <span class="submit" @click="confirmSubmit">提交</span>
+        <span class="submit" :class="{'active': value.trim().length}" @click="confirmSubmit">提交</span>
       </div>
       
       <div class="total"><span>{{today}} 已报名{{member.length}}人</span></span></div>
@@ -105,21 +105,6 @@
           vm.already = true
           return
         }
-        var date = 'date_' + moment().format('YYYY-MM-DD').toString()
-        store.set(date, 1)
-        vm.showInput = false
-
-        store.set('lastApplyUserName', value)
-        store.set('whoami', {
-          date: moment().format('YYYY-MM-DD'),
-          teamId: vm.teamId,
-          userName: value
-        })
-
-        // keydown后同步修改vm.value，不会生效
-        // 可能是插件监听keyup事件后重新赋值
-        // 改成keyup解决了
-        vm.value = ''
 
         vm.$http({
           method: 'post',
@@ -128,10 +113,27 @@
             teamId: vm.teamId,
             userName: value
           }
-        }).then(function () {
+        }).then(function ({body}) {
+          if (body.err) {
+            return
+          }
+
+          var date = moment().format('YYYY-MM-DD').toString()
+          store.set('lastApplyDate', date)
+          vm.showInput = false
+
+          store.set('lastApplyUserName', value)
+          store.set('whoami', {
+            date: date,
+            teamId: vm.teamId,
+            userName: value
+          })
+
+          // keydown后同步修改vm.value，不会生效
+          // 可能是插件监听keyup事件后重新赋值
+          // 改成keyup解决了
+          vm.value = ''
           vm.update()
-        }, function () {
-          store.set(date, 0)
         })
       },
       remove: function (ok) {
@@ -184,11 +186,6 @@
         vm.timer = setTimeout(poll, 2000)
       }
       vm.timer = setTimeout(poll, 1000)
-
-      var date = 'date_' + moment().format('YYYY-MM-DD').toString()
-      if (store.get(date)) {
-        vm.showInput = false
-      }
     },
     destroyed: function () {
       var vm = this
@@ -200,6 +197,11 @@
 
         vm.teamId = vm.$route.params.team
         vm.$root.loadingVisible = true
+
+        var lastApplyDate = moment().format('YYYY-MM-DD').toString()
+        if (store.get('lastApplyDate') === lastApplyDate) {
+          vm.showInput = false
+        }
 
         if (store.get('lastApplyUserName')) {
           vm.lastApplyUserName = store.get('lastApplyUserName')
@@ -296,12 +298,15 @@
       top: 0;
       width: 60px;
       height: 100%;
-      background: #1bc769;
+      background: #b1b1b1;
       text-align: center;
       line-height: 36px;
       border-radius: 0 8px 8px 0;
       color: #fff;
       cursor: pointer;
+      &.active{
+        background: #1bc769;
+      }
     }
   }
 </style>

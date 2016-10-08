@@ -71,10 +71,6 @@ router.beforeEach(function (transition) {
   var toPath = transition.to.path
   var direction
 
-  if (fromPath) {
-    console.log(fromPath, toPath)
-  }
-
   if (!fromPath) {
     direction = 'current'
   } else if (getPathLength(fromPath) < getPathLength(toPath)) {
