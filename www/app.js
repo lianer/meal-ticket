@@ -19,25 +19,31 @@ var log = bunyan.createLogger({
     {
       level: 'info',
       // stream: process.stdout,
-      path: path.join(__dirname, './data/bunyan-logs/info.log')
+      path: path.join(__dirname, './logs/info.log')
     },
     {
       level: 'warn',
       // stream: process.stdout,
-      path: path.join(__dirname, './data/bunyan-logs/warn.log')
+      path: path.join(__dirname, './logs/warn.log')
     },
     {
       level: 'error',
       // stream: process.stdout,
-      path: path.join(__dirname, './data/bunyan-logs/error.log')
+      path: path.join(__dirname, './logs/error.log')
     },
     {
       level: 'fatal',
       // stream: process.stdout,
-      path: path.join(__dirname, './data/bunyan-logs/fatal.log')
+      path: path.join(__dirname, './logs/fatal.log')
     },
   ]
 });
+
+try{
+  aaaaa();
+}catch(e){
+  log.warn(e, 'dddd');
+}
 
 var app = express();
 
