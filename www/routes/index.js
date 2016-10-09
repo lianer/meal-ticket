@@ -31,6 +31,16 @@ function getClientIp(req) {
     req.connection.socket.remoteAddress;
 }
 
+// function getClientIp(req) {
+//   var forwardedFor = req.headers['x-forwarded-for'];
+//   if (forwardedFor !== undefined) return forwardedFor.split(',')[0];
+//   var cf = req.headers['cf-connecting-ip'];
+//   if (cf !== undefined) return cf;
+//   return req.connection.remoteAddress ||
+//     req.socket.remoteAddress ||
+//     req.connection.socket.remoteAddress;
+// }
+
 function setUserInfo(teamId, date, userName, avatar /* 头像，可选 */, intro /* 介绍，可选 */) {
   db.update(`${teamId}.info.date${date}`, function (info) {
     if(!info){
@@ -192,14 +202,12 @@ router.post('/team/apply', function (req, res, next) {
   }
 
   if(logdb.get('apply').findIndex(match).value() > -1){
-    try{
-      console.error(match)
-    }catch(e){}
-    res.json({
-      err: 3,
-      msg: ''
-    });
-    return;
+    req.warn(match, 'ip重复提交')
+    // res.json({
+    //   err: 3,
+    //   msg: ''
+    // });
+    // return;
   }
 
   // 记录日志

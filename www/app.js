@@ -4,8 +4,48 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var bunyan = require('bunyan');
+var log = bunyan.createLogger({
+  name: 'ticket-log',
+  streams: [
+    {
+      level: 'trace',
+      stream: process.stdout
+    },
+    {
+      level: 'debug',
+      stream: process.stdout
+    },
+    {
+      level: 'info',
+      // stream: process.stdout,
+      path: path.join(__dirname, './data/bunyan-logs/info.log')
+    },
+    {
+      level: 'warn',
+      // stream: process.stdout,
+      path: path.join(__dirname, './data/bunyan-logs/warn.log')
+    },
+    {
+      level: 'error',
+      // stream: process.stdout,
+      path: path.join(__dirname, './data/bunyan-logs/error.log')
+    },
+    {
+      level: 'fatal',
+      // stream: process.stdout,
+      path: path.join(__dirname, './data/bunyan-logs/fatal.log')
+    },
+  ]
+});
 
 var app = express();
+
+// inject bunyan
+app.use(function (req, res, next) {
+  req.log = log;
+  next();
+});
 
 app.use(function (req, res, next) {
   res.set('Access-Control-Allow-Origin', '*');
@@ -41,32 +81,25 @@ app.use(function(req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
-    console.log(err);
+    req.log.error(err);
     res.status(err.status || 500);
     res.json({
       err: 500,
       msg: err.msg,
       data: err.toString()
     });
-    // res.render('error', {
-    //   message: err.message,
-    //   error: err
-    // });
   });
 }
 
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
+  req.log.error(err);
   res.status(err.status || 500);
   res.json({
     err: 500,
     msg: '服务异常'
   });
-  // res.render('error', {
-  //   message: err.message,
-  //   error: {}
-  // });
 });
 
 
