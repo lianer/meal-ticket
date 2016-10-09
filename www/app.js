@@ -39,12 +39,6 @@ var log = bunyan.createLogger({
   ]
 });
 
-try{
-  aaaaa();
-}catch(e){
-  log.warn(e, 'dddd');
-}
-
 var app = express();
 
 // inject bunyan

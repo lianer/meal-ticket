@@ -204,7 +204,7 @@ router.post('/team/apply', function (req, res, next) {
   req.log.info(match, 'ip提交日志');
 
   if(logdb.get('apply').findIndex(match).value() > -1){
-    req.warn(match, 'ip重复提交');
+    req.log.warn(match, 'ip重复提交');
     // res.json({
     //   err: 3,
     //   msg: ''
