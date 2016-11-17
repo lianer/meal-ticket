@@ -354,7 +354,8 @@ router.get('/user', function (req, res, next) {
 
 // 导出当天成员excel
 router.get('/team/export', function (req, res, next) {
-  var date = moment().format("YYYYMMDD").toString();
+  var queryDate = req.query.date || new Date();
+  var date = moment(queryDate).format("YYYYMMDD").toString();
   var teamId = req.query.teamId;
   var teamName = '';
   var teamMember;
