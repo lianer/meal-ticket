@@ -52,6 +52,8 @@ node ./server.js
 
 发布到线上使用nginx托管，还需要做很多工作，见文章[webpack+vue+vux+express+lowdb](http://imlianer.com/a/webpack-vue-vux-express-lowdb)
 
+生产环境中为了避免执行 npm run build 时客户端请求出现 404，因此 nginx 将静态目录代理到 dist-prod，并且在 npm run build 之后执行 rsync 将 dist 目录同步到 dist-prod 目录
+
 ## 示例
 ```bash
 # bash1
@@ -67,5 +69,3 @@ node server.js
 cd D:/_repos/meal-ticket/app
 npm run build
 ```
-
-
