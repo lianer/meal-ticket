@@ -9,3 +9,4 @@ logdb.json
 npm-debug.log*
 dist/
 dist-prod/
+locals.config.prod.js

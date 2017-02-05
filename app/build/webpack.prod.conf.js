@@ -1,3 +1,4 @@
+var fs = require('fs')
 var path = require('path')
 var config = require('../config')
 var utils = require('./utils')
@@ -28,7 +29,9 @@ var webpackConfig = merge(baseWebpackConfig, {
   },
   plugins: [
     new webpack.ProvidePlugin({
-      locals: path.join(__dirname, '../locals.config.prod.js')
+      locals: fs.existsSync(path.join(__dirname, '../locals.config.prod.js')) ?
+        path.join(__dirname, '../locals.config.prod.js') :
+        path.join(__dirname, '../locals.config.dev.js')
     }),
     // http://vuejs.github.io/vue-loader/workflow/production.html
     new webpack.DefinePlugin({
