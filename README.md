@@ -4,68 +4,31 @@
 
 项目开源，通过这些步骤就可以在本地预览效果。
 
-## 启动api服务
-
-所有数据都走api跨域请求，默认使用4003端口，在./bin/www文件中修改
-
-```bash
-cd ./www
-npm i
-node ./bin/www
-```
-
-## 开发app（本地开发模式）
+## 开发环境
 
 webpack的开发模式，浏览器访问 http://localhost:8080
 
 ```bash
+# 启动 api 服务
+cd ./www
+node ./bin/www
+cd ..
+
+# 启动 app
 cd ./app
 npm i
 npm run dev
+cd ..
 ```
 
-## 编译app（打包发布模式）
+## 生产环境
 
-打包发布模式下读取的是locals.config.prod.js配置文件
-
-打开locals.config.prod.js配置文件，将api改为本地的api地址http://localhost:4003
+进入 app 目录，创建 locals.config.prod.js，生产环境优先读取是 locals.config.prod.js 配置文件，然后执行启动脚本
 
 ```bash
-cd ./app
-npm i
-npm run build
+sh start.sh
 ```
 
-## 本地预览
+生产环境中为了避免执行 npm run build 时客户端请求出现 404，因此 nginx 将静态目录代理到 dist-prod，并在 npm run build 之后执行 rsync 将 dist 目录同步到 dist-prod 目录
 
-通过express实现的简单静态服务，浏览器访问 http://localhost:4000
-
-打开locals.config.prod.js配置文件，将api改为本地的api地址http://localhost:4003
-
-```bash
-cd ./app
-npm i
-node ./server.js
-```
-
-## 发布线上
-
-发布到线上使用nginx托管，还需要做很多工作，见文章[webpack+vue+vux+express+lowdb](http://imlianer.com/a/webpack-vue-vux-express-lowdb)
-
-生产环境中为了避免执行 npm run build 时客户端请求出现 404，因此 nginx 将静态目录代理到 dist-prod，并且在 npm run build 之后执行 rsync 将 dist 目录同步到 dist-prod 目录
-
-## 示例
-```bash
-# bash1
-cd D:/_repos/meal-ticket/www
-nodemon ./bin/www
-# bash2
-cd D:/_repos/meal-ticket/app
-$env:port=8022;npm run dev
-# bash3
-cd D:/_repos/meal-ticket/app
-node server.js
-# bash4
-cd D:/_repos/meal-ticket/app
-npm run build
-```
+nginx 配置见文章[webpack+vue+vux+express+lowdb](http://imlianer.com/a/webpack-vue-vux-express-lowdb)
