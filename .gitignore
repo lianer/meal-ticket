@@ -10,3 +10,5 @@ npm-debug.log*
 dist/
 dist-prod/
 locals.config.prod.js
+logs
+!/www/logs/README.md
