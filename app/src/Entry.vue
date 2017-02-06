@@ -40,11 +40,7 @@
   }
 </script>
 
-<style>
-  @import '~vux/dist/vux.css';
-</style>
-
-<style lang="scss" scoped>
+<style lang="less" scoped>
   .list{
     margin: 0 12px;
     border-radius: 8px;

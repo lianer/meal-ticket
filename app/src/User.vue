@@ -2,15 +2,15 @@
   <div class="page-user" :style="{'min-height': $root.clientHeight}">
     <div class="page-wrap" :style="{'min-height': $root.clientHeight}">
       <v-header :title="userName"></v-header>
-      
+
       <div class="avatar">
-        <img :src="`/static/img/avatar/${info.avatar}.jpg`">
+        <img v-if="info.avatar" :src="`/static/img/avatar/${info.avatar}.jpg`">
       </div>
-      
+
       <div class="intro">
         {{info.intro}}
       </div>
-      
+
       <div class="total">
         <span>{{teamName}} {{userName}} 已加班 {{count}} 天</span>
       </div>
@@ -115,31 +115,27 @@
   }
 </script>
 
-<style>
-  @import '~vux/dist/vux.css';
-</style>
-
-<style lang='scss' scoped>
-  $page-sticky-footer-height: 60px;
-  $page-sticky-footer-padding: 12px;
+<style lang="less" scoped>
+  @page-sticky-footer-height: 60px;
+  @page-sticky-footer-padding: 12px;
   .page-wrap{
-    margin-bottom: -$page-sticky-footer-height;
+    margin-bottom: -@page-sticky-footer-height;
     &:after{
       content: "";
       display: block;
-      height: $page-sticky-footer-height;
+      height: @page-sticky-footer-height;
     }
   }
   .page-sticky-footer{
-    padding: $page-sticky-footer-padding;
+    padding: @page-sticky-footer-padding;
     span{
       display: block;
       width: 100%;
-      height: $page-sticky-footer-height - $page-sticky-footer-padding * 2;
+      height: @page-sticky-footer-height - @page-sticky-footer-padding * 2;
       background: #f7446c;
       font-size: 14px;
       text-align: center;
-      line-height: $page-sticky-footer-height - $page-sticky-footer-padding * 2;
+      line-height: @page-sticky-footer-height - @page-sticky-footer-padding * 2;
       color: #fff;
       border-radius: 8px;
     }

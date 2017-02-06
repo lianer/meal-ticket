@@ -2,7 +2,7 @@
   <div class="v-panel">
     <div class="left">
       <slot name="left">
-        
+
       </slot>
     </div>
     <div class="center">
@@ -29,7 +29,7 @@
   }
 </script>
 
-<style lang='scss'>
+<style lang="less">
   .v-panel{
     position: relative;
     width: 100%;

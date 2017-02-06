@@ -11,7 +11,7 @@
       </div>
       <div class="right">
         <slot name="right">
-          
+
         </slot>
       </div>
     </div>
@@ -32,9 +32,9 @@
   }
 </script>
 
-<style lang='scss'>
+<style lang="less">
   .v-header{
-    $height: 40px;
+    @height: 40px;
     &{
       z-index: 100;
       position: relative;
@@ -46,7 +46,7 @@
     }
     .header-wrap{
       position: relative;
-      height: $height;
+      height: @height;
       background: rgba(255, 255, 255, .9);
       border-radius: 8px;
       box-shadow: 0 0 8px 1px rgba(0, 0, 0, .05);
@@ -60,7 +60,7 @@
       height: 100%;
       .v-header-back{
         position: relative;
-        top: ($height - 18px) / 2;
+        top: (@height - 18px) / 2;
         left: 0;
         cursor: pointer;
       }
@@ -85,7 +85,7 @@
       position: relative;
       margin: 0 100px;
       height: 100%;
-      line-height: $height;
+      line-height: @height;
       text-align: center;
       h1{
         overflow: hidden;

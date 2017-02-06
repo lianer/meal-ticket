@@ -4,23 +4,23 @@
       <v-header :title="teamName">
         <a :href="locals.api + '/team/export?teamId=' + teamId" slot="right" class="export">Export</a>
       </v-header>
-      
+
       <div class="search" v-show="showInput">
-        <input type="search" 
-          v-model="value" 
-          :placeholder="placeholder" 
-          @keyup.enter="confirmSubmit" 
+        <input type="search"
+          v-model="value"
+          :placeholder="placeholder"
+          @keyup.enter="confirmSubmit"
           @keydown.tab.prevent="useLastApplyUserName"
         >
         <span class="submit" :class="{'active': value.trim().length}" @click="confirmSubmit">提交</span>
       </div>
-      
+
       <div class="total"><span>{{today}} 已报名{{member.length}}人</span></span></div>
-      
+
       <div class="list" v-if="member && member.length">
-        <v-panel v-for="(index, item) in member" 
+        <v-panel v-for="(index, item) in member"
           v-link="'/' + teamId + '/' + item.name"
-          :title="item.name" 
+          :title="item.name"
           :summary="item.intro"
           >
           <span slot="left">
@@ -33,9 +33,9 @@
     <div class="page-sticky-footer">
       数据将会每日统计上报，请使用真实姓名
     </div>
-    
+
     <toast :show.sync="already" :type="'text'">该成员已存在</toast>
-    
+
     <confirm :show.sync="confirm" title="确认删除？" @on-confirm="remove(true)" @on-cancel="remove(false)"></confirm>
     <confirm :show.sync="showConfirmSubmitModal" title="每天只有一次提交，确认提交？" @on-confirm="submit(true)" @on-cancel="submit(false)"></confirm>
   </div>
@@ -229,23 +229,19 @@
   }
 </script>
 
-<style lang='scss'>
-  @import '~vux/dist/vux.css';
-</style>
-
-<style lang='scss' scoped>
-  $page-sticky-footer-height: 50px;
+<style lang='less' scoped>
+  @page-sticky-footer-height: 50px;
   .page-wrap{
-    margin-bottom: -$page-sticky-footer-height;
+    margin-bottom: -@page-sticky-footer-height;
     &:after{
       content: "";
       display: block;
-      height: $page-sticky-footer-height;
+      height: @page-sticky-footer-height;
     }
   }
   .page-sticky-footer{
     font-size: 12px;
-    line-height: $page-sticky-footer-height;
+    line-height: @page-sticky-footer-height;
     text-align: center;
     color: #999;
   }
@@ -311,7 +307,7 @@
   }
 </style>
 
-<style lang='scss'>
+<style lang="less">
   .page-apply{
     .list{
       .v-panel{

@@ -3,8 +3,6 @@ import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import './filters.js'
 
-import 'assets/scss/common.scss'
-
 import App from './App.vue'
 import Entry from './Entry.vue'
 import Apply from './Apply.vue'

@@ -35,3 +35,11 @@
     }
   }
 </script>
+
+<style lang="less">
+    @import "assets/style/common.less";
+</style>
+
+<style>
+  @import "~vux/dist/vux.css";
+</style>
