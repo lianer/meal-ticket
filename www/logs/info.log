@@ -1,7 +1,0 @@
-{"name":"ticket-log","hostname":"Lianers-MacBook-Pro.local","pid":4384,"level":30,"ip":"::ffff:127.0.0.1","date":"20170206","teamId":"yypt","msg":"ip提交日志","time":"2017-02-06T07:31:27.142Z","v":0}
-{"name":"ticket-log","hostname":"Lianers-MacBook-Pro.local","pid":4392,"level":30,"ip":"::ffff:127.0.0.1","date":"20170206","teamId":"yypt","msg":"ip提交日志","time":"2017-02-06T07:33:35.122Z","v":0}
-{"name":"ticket-log","hostname":"Lianers-MacBook-Pro.local","pid":4392,"level":40,"ip":"::ffff:127.0.0.1","date":"20170206","teamId":"yypt","msg":"ip重复提交","time":"2017-02-06T07:33:35.124Z","v":0}
-{"name":"ticket-log","hostname":"Lianers-MacBook-Pro.local","pid":4422,"level":30,"ip":"::ffff:127.0.0.1","date":"20170206","teamId":"yypt","msg":"ip提交日志","time":"2017-02-06T07:34:39.851Z","v":0}
-{"name":"ticket-log","hostname":"Lianers-MacBook-Pro.local","pid":4422,"level":40,"ip":"::ffff:127.0.0.1","date":"20170206","teamId":"yypt","msg":"ip重复提交","time":"2017-02-06T07:34:39.853Z","v":0}
-{"name":"ticket-log","hostname":"Lianers-MacBook-Pro.local","pid":4469,"level":30,"ip":"::ffff:127.0.0.1","date":"20170206","teamId":"yypt","msg":"ip提交日志","time":"2017-02-06T07:35:06.930Z","v":0}
-{"name":"ticket-log","hostname":"Lianers-MacBook-Pro.local","pid":4469,"level":40,"ip":"::ffff:127.0.0.1","date":"20170206","teamId":"yypt","msg":"ip重复提交","time":"2017-02-06T07:35:06.932Z","v":0}

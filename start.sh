@@ -13,7 +13,7 @@ cd ..
 cd www
 export NODE_ENV="production"
 export PORT=4004
-pm2 start ./bin/www --name ticket-api -i 2
+pm2 start ./bin/www --name ticket-api
 cd ..
 
 # build app
