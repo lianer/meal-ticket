@@ -19,12 +19,12 @@
     "name": "应用平台",
     "apply": {
       "date20160923": {
-        "member": ["楼云龙"]
+        "member": ["lianer"]
       }
     },
     "info": {
       "date20160923": [{
-        "name": "楼云龙",
+        "name": "lianer",
         "avatar": "1",
         "intro": "我为加班而自豪"
       }]
@@ -52,7 +52,7 @@
   "apply": [{
     "teamId": "yypt",
     "teamName": "应用平台",
-    "userName": "楼云龙",
+    "userName": "lianer",
     "date": "20160927",
     "timestamp": "123123123123123",
     "ip": "127.0.0.1",

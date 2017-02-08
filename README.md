@@ -4,9 +4,10 @@
 
 项目开源，通过这些步骤就可以在本地预览效果。
 
-## 开发环境
+## 创建初始数据库文件
+重命名 www/data/db2.json.bak 为 www/data/db2.json
 
-webpack的开发模式，浏览器访问 http://localhost:8080
+## 开发环境
 
 ```bash
 # 启动 api 服务
