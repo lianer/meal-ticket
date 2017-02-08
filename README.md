@@ -12,7 +12,8 @@
 ```bash
 # 启动 api 服务
 cd ./www
-node ./bin/www
+npm i
+npm start
 cd ..
 
 # 启动 app
